@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sesión RAG | Curso de inmersión en Inteligencia Artificial</title>
+<meta name="description" content="Qué es RAG, en qué se diferencia de un modelo solo, cómo preparar los datos y un diagnóstico para saber si lo necesitas.">
+<style>
+{{FONT_CSS}}
+:root{--bg:#fff;--bg1:#fafafa;--ink:#111114;--ink75:#43444c;--ink60:#5f6069;--line:rgba(0,0,0,.09);--line2:rgba(0,0,0,.16);--surf:rgba(0,0,0,.022);
+--g:#00522c;--g2:#78b92f;--gs:#eef5f0;--ret:#e11d48;--gen:#d97706;--dat:#2563eb;--ok:#16a34a;--bad:#dc2626}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Inter',system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+.code{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60);letter-spacing:.02em}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.nav{position:sticky;top:0;z-index:20;background:#ffffffee;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:8px;padding-bottom:8px}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;font-size:14px;color:var(--ink60);padding:6px 11px;border-radius:7px}
+.nav a:hover{background:rgba(0,0,0,.05);color:var(--ink)}
+.nav a.on{background:var(--gs);color:var(--g);font-weight:600}
+.nav a.back{font-weight:600;color:var(--ink);margin-right:6px}
+header.hero{padding:56px 0 28px}
+h1{font-size:clamp(30px,6vw,52px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 14px;font-weight:600}
+h1 em{font-style:normal;background:linear-gradient(135deg,#00522c,#78b92f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink60);max-width:64ch;font-size:18px;margin:0}
+section.s{padding:56px 0 8px;scroll-margin-top:52px}
+section.s>.wrap>h2{font-size:clamp(24px,4vw,34px);letter-spacing:-.015em;margin:6px 0 8px;font-weight:600;line-height:1.15}
+.intro{color:var(--ink60);max-width:66ch;margin:0 0 22px}
+.card{border:1px solid var(--line);background:var(--surf);border-radius:14px;padding:20px}
+.grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.chip{border:1px solid var(--line2);background:#fff;border-radius:99px;padding:7px 13px;font-size:14px;color:var(--ink75)}
+.chip:hover{border-color:var(--g)}
+.chip[aria-pressed="true"],.chip.on{background:var(--g);border-color:var(--g);color:#fff}
+.btn{background:var(--g);color:#fff;border:0;border-radius:9px;padding:10px 16px;font-weight:600;font-size:15px}
+.btn:hover{background:#003d20}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line2)}
+.btn.ghost:hover{border-color:var(--g);background:#fff}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--gs);color:var(--g)}
+.tag.bad{background:#fee2e2;color:#991b1b}.tag.ok{background:#dcfce7;color:#166534}.tag.warn{background:#fef3c7;color:#92400e}
+.note{font-size:13px;color:var(--ink60)}
+
+/* 1 grafica */
+.chartbox{display:grid;gap:20px;grid-template-columns:minmax(0,320px) 1fr;align-items:center}
+@media(max-width:760px){.chartbox{grid-template-columns:1fr}}
+.donut{width:100%;max-width:320px;margin:0 auto;display:block}
+.donut path{cursor:pointer;transition:opacity .15s,transform .15s;transform-origin:160px 160px;stroke:#fff;stroke-width:2}
+.donut path:hover{opacity:.85}
+.donut path.sel{transform:scale(1.045)}
+.legend{display:grid;gap:6px}
+.legend button{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 12px;font-size:14px}
+.legend button.sel{border-color:var(--g);background:var(--gs)}
+.legend i{width:12px;height:12px;border-radius:3px;flex:none}
+.legend b{margin-left:auto;font-variant-numeric:tabular-nums}
+.detail{margin-top:10px;padding:12px 14px;border-left:3px solid var(--g);background:var(--gs);border-radius:0 9px 9px 0;font-size:15px;min-height:56px}
+.probe{margin-top:26px}
+.probe h3,.sub{font-size:18px;margin:0 0 4px;font-weight:600}
+.items{display:grid;gap:8px;margin-top:12px}
+.item{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px}
+.item .q{flex:1}
+.item .res{display:none;margin-top:6px;font-size:14px;color:var(--ink60)}
+.item.open .res{display:block}
+.item button{flex:none}
+.scoreline{margin-top:12px;font-weight:600}
+
+/* 2 modelo vs rag */
+.cmp{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+.cmp th,.cmp td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{font-size:13px}.cmp th:first-child{color:#7c3aed}.cmp th:last-child{color:var(--dat)}
+.cmp tr:last-child td{border-bottom:0}
+.cmp tr.hl td{background:var(--gs)}
+.cmp td:last-child{font-weight:500}
+.pipe{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:6px 0 14px}
+.pipe .st{flex:1 1 130px;border:1.5px solid var(--line2);background:#fff;border-radius:10px;padding:10px 12px;text-align:left;font-size:14px;line-height:1.3;transition:.2s}
+.pipe .st small{display:block;color:var(--ink60);font-size:12px;margin-top:2px}
+.pipe .st.act{border-color:var(--g);background:var(--gs);box-shadow:0 0 0 3px #00522c1a}
+.pipe .st.ret.act{border-color:var(--ret);background:#fff1f3;box-shadow:0 0 0 3px #e11d481a}
+.pipe .st.gen.act{border-color:var(--gen);background:#fffbeb;box-shadow:0 0 0 3px #d977061a}
+.qrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.kctl{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:14px}
+.kctl input{width:160px;accent-color:var(--g)}
+.frags{display:grid;gap:8px;margin:10px 0}
+.frag{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font-size:14px;transition:.2s}
+.frag.used{border-color:var(--ret);background:#fff1f3}
+.frag.dim{opacity:.55}
+.frag .src{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60);display:block;margin-bottom:2px}
+.frag .sc{font:500 13px 'IBM Plex Mono',monospace;text-align:right}
+.frag .bar{height:5px;border-radius:3px;background:var(--line);margin-top:5px;overflow:hidden;width:70px}
+.frag .bar i{display:block;height:100%;background:var(--ret)}
+.frag .n{font:600 13px 'IBM Plex Mono',monospace;color:var(--ret)}
+.ans{border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px 16px;margin-top:8px}
+.ans h4{margin:0 0 6px;font-size:14px;display:flex;gap:8px;align-items:center}
+.ans p{margin:0;font-size:15px}
+.ans.bad{border-left:4px solid var(--bad)}.ans.good{border-left:4px solid var(--ok)}
+.empty{color:var(--ink60);font-size:14px;padding:10px 0}
+
+/* 3 datos */
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.steps .chip{display:flex;gap:8px;align-items:center}
+.steps .chip b{font:600 12px 'IBM Plex Mono',monospace}
+.panel[hidden]{display:none}
+.chk{display:grid;gap:8px;margin:10px 0}
+.chk label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;cursor:pointer}
+.chk input{margin-top:4px;accent-color:var(--g);width:18px;height:18px;flex:none}
+.chk label.on{border-color:var(--g);background:var(--gs)}
+.chk b{display:block}.chk span{color:var(--ink60);font-size:14px}
+.warnbox[hidden]{display:none}
+.warnbox{display:flex;gap:10px;align-items:flex-start;background:#fff1f3;border:1px solid #fecdd3;border-radius:10px;padding:11px 14px;font-size:14px;margin-top:10px}
+.cols{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+@media(max-width:760px){.cols{grid-template-columns:1fr}}
+.paper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;font-size:14px;line-height:1.6;white-space:pre-wrap;min-height:160px}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.opts label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font-size:14px;cursor:pointer}
+.opts input{accent-color:var(--g)}
+.chunks{display:grid;gap:8px;margin-top:10px}
+.chunk{border:1px solid var(--line);border-left-width:4px;background:#fff;border-radius:9px;padding:9px 12px;font-size:14px}
+.chunk .meta{font:500 11.5px 'IBM Plex Mono',monospace;color:var(--ink60);margin-bottom:3px}
+.chunk mark{background:#fde68a;padding:0 2px;border-radius:3px}
+.sel2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+select{font:inherit;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
+.fmt{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.fmt div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.fmt small{display:block;color:var(--ink60);font-size:12px}.fmt b{font-size:17px}
+
+/* 4 diagnostico */
+.diag{max-width:720px}
+.prog{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.prog i{display:block;height:100%;background:var(--g);transition:width .3s}
+.qn{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60)}
+.dq{font-size:22px;line-height:1.25;margin:6px 0 6px;font-weight:600;letter-spacing:-.01em}
+.dh{color:var(--ink60);font-size:15px;margin:0 0 14px}
+.dopt{display:block;width:100%;text-align:left;border:1.5px solid var(--line2);background:#fff;border-radius:11px;padding:13px 15px;margin-top:8px;font-size:16px;transition:.15s}
+.dopt:hover{border-color:var(--g);background:var(--gs)}
+.verdict{border-radius:14px;padding:20px;border:2px solid var(--g);background:var(--gs)}
+.verdict.paste{border-color:var(--dat);background:#eff6ff}
+.verdict.llm{border-color:#7c3aed;background:#f5f3ff}
+.verdict h3{margin:4px 0 6px;font-size:26px;letter-spacing:-.01em}
+.meter{display:grid;gap:6px;margin:14px 0}
+.meter div{display:grid;grid-template-columns:150px 1fr 28px;gap:10px;align-items:center;font-size:13px}
+.meter .b{height:8px;background:#0000000f;border-radius:5px;overflow:hidden}
+.meter .b i{display:block;height:100%;border-radius:5px}
+.before{margin-top:14px}
+.before ul{margin:6px 0 0;padding-left:20px}.before li{margin:5px 0;font-size:15px}
+
+/* 5 herramientas */
+.stages{display:flex;gap:6px;flex-wrap:wrap}
+.stages .chip{font-size:13.5px}
+.stages .chip .code{margin-right:6px;color:inherit;opacity:.7}
+.tooldet{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+.tooldet h4{margin:0 0 4px;font-size:18px}
+.tooldet p{margin:0 0 10px;color:var(--ink60);font-size:15px}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.tl{border:1px solid var(--line2);border-radius:9px;padding:6px 11px;font-size:14px;background:var(--bg1)}
+.tl small{color:var(--ink60);margin-left:4px}
+.levels{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-top:22px}
+.levels .card h4{margin:6px 0 4px;font-size:18px}
+.levels .card p{margin:0 0 10px;color:var(--ink60);font-size:15px}
+.levels ul{margin:0;padding-left:18px;font-size:14.5px}.levels li{margin:4px 0}
+
+.gdisc{margin-top:34px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg1);font-size:14px;color:var(--ink60)}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:20px 0 44px;color:var(--ink60);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+{{INST_BAND}}
+<nav class="nav" aria-label="Secciones de la sesión"><div class="wrap">
+  <a class="back" href="index.html">&larr; Curso</a>
+  <a href="#grafica">1 · Qué sabe el modelo</a>
+  <a href="#modelo-vs-rag">2 · Modelo vs RAG</a>
+  <a href="#datos">3 · Prepara los datos</a>
+  <a href="#diagnostico">4 · ¿RAG o no RAG?</a>
+  <a href="#herramientas">5 · Herramientas</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="code">/sesión 2 · RAG</span>
+  <h1>Que la IA responda con <em>tus documentos</em>, no de memoria</h1>
+  <p class="lead">Retrieval-Augmented Generation, explicado haciendo. Vas a ver con qué se entrena un modelo, qué cambia cuando le das tus fuentes, cómo se preparan los datos y si de verdad necesitas RAG.</p>
+</div></header>
+
+<!-- 1 -->
+<section class="s" id="grafica"><div class="wrap">
+  <span class="code">/1</span>
+  <h2>¿Con qué información se entrena un modelo?</h2>
+  <p class="intro">Toca cada porción. Es la composición que usamos en clase para GPT-4. Lo importante es lo que falta: nada de eso es tu oficina.</p>
+  <div class="card">
+    <div class="chartbox">
+      <svg class="donut" viewBox="0 0 320 320" role="img" aria-label="Composición de los datos de entrenamiento, gráfico de torta"></svg>
+      <div>
+        <div class="legend" id="legend"></div>
+        <div class="detail" id="seg-detail" aria-live="polite">Toca una porción para ver qué contiene.</div>
+      </div>
+    </div>
+    <p class="note" style="margin:12px 0 0">Cifras ilustrativas de la clase. OpenAI no publica la composición exacta de sus datos de entrenamiento. El conocimiento del modelo llega hasta su fecha de corte (para GPT-4, 2023) y no se actualiza solo.</p>
+  </div>
+
+  <div class="probe">
+    <h3>Prueba: ¿esto lo sabe el modelo?</h3>
+    <p class="note" style="margin:0">Decide en cada caso y toca «Ver respuesta».</p>
+    <div class="items" id="probe"></div>
+    <div class="scoreline" id="probe-score"></div>
+  </div>
+</div></section>
+
+<!-- 2 -->
+<section class="s" id="modelo-vs-rag"><div class="wrap">
+  <span class="code">/2</span>
+  <h2>Un modelo solo frente a un modelo con RAG</h2>
+  <p class="intro">RAG une dos piezas: un <b style="color:var(--ret)">recuperador</b> que busca en tus documentos y un <b style="color:var(--gen)">generador</b> (el LLM) que redacta la respuesta con lo que el recuperador encontró.</p>
+
+  <table class="cmp" id="cmp"><thead><tr><th>LLM tradicional</th><th>RAG</th></tr></thead><tbody>
+    <tr><td>Entrenamiento masivo</td><td>Consulta externa dinámica</td></tr>
+    <tr><td>Memoria estática</td><td>Conocimiento actualizado</td></tr>
+    <tr><td>Sin trazabilidad</td><td>Trazabilidad documental</td></tr>
+    <tr><td>Alucinaciones frecuentes</td><td>Respuestas soportadas en fuentes</td></tr>
+  </tbody></table>
+
+  <div class="card" style="margin-top:22px">
+    <h3 class="sub">Míralo funcionar</h3>
+    <p class="note" style="margin:0 0 8px">Corpus ficticio de una oficina de propiedad intelectual. Elige una pregunta y mira qué recupera el sistema.</p>
+    <div class="pipe" id="pipe"></div>
+    <div class="qrow" id="qs"></div>
+    <div class="kctl"><label for="k">Fragmentos que se recuperan (k)</label><input type="range" id="k" min="1" max="4" value="2"><b id="kv">2</b></div>
+    <div class="frags" id="frags"><div class="empty">Elige una pregunta para empezar.</div></div>
+    <div class="grid2">
+      <div class="ans bad" id="ans-llm"><h4><span class="tag bad">Sin RAG</span> responde de memoria</h4><p class="empty">Elige una pregunta.</p></div>
+      <div class="ans good" id="ans-rag"><h4><span class="tag ok">Con RAG</span> responde con tus fuentes</h4><p class="empty">Elige una pregunta.</p></div>
+    </div>
+    <p class="note" style="margin:10px 0 0">Prueba k = 1 con la segunda pregunta: el fragmento correcto queda de segundo y se pierde. Luego prueba la cuarta. Si el fragmento correcto no se recupera, el generador no puede inventarlo bien. Si no está en los documentos, un buen RAG lo dice.</p>
+  </div>
+</div></section>
+
+<!-- 3 -->
+<section class="s" id="datos"><div class="wrap">
+  <span class="code">/3</span>
+  <h2>Prepara los datos antes de tocar nada técnico</h2>
+  <p class="intro">Si el corpus no tiene sentido para el caso de uso, el RAG responde mal aunque la técnica sea correcta. Son tres pasos.</p>
+  <div class="steps" id="dsteps" role="tablist"></div>
+
+  <div class="panel card" id="d1">
+    <h3 class="sub">1. Selección de documentos: el sentido del corpus</h3>
+    <p class="note" style="margin:0">Antes de cualquier paso técnico responde: ¿qué problema quiero resolver con RAG? ¿qué preguntas debe poder contestar mi sistema? Luego marca qué cumple tu corpus.</p>
+    <div class="chk" id="crit"></div>
+    <div class="scoreline" id="crit-score"></div>
+    <div class="warnbox" id="crit-warn" hidden></div>
+  </div>
+
+  <div class="panel card" id="d2" hidden>
+    <h3 class="sub">2. Procesamiento inicial</h3>
+    <p class="note" style="margin:0">Activa cada limpieza y mira cómo cambia el texto.</p>
+    <div class="opts" id="clean-opts">
+      <label><input type="checkbox" data-c="ruido"> Eliminar ruido</label>
+      <label><input type="checkbox" data-c="vocab"> Unificar vocabulario</label>
+      <label><input type="checkbox" data-c="norm"> Normalizar formato</label>
+    </div>
+    <div class="cols"><div><span class="code">/antes</span><div class="paper" id="raw"></div></div><div><span class="code">/después</span><div class="paper" id="clean"></div></div></div>
+  </div>
+
+  <div class="panel card" id="d3" hidden>
+    <h3 class="sub">3. Fragmentación (chunking)</h3>
+    <p class="note" style="margin:0">En producción se divide en fragmentos de 300 a 500 palabras y cada uno conserva sus metadatos (título, autor, fecha, tipo de norma). Aquí usamos fragmentos cortos para que se vea.</p>
+    <div class="opts" id="chunk-mode">
+      <label><input type="radio" name="cm" value="size" checked> Por tamaño</label>
+      <label><input type="radio" name="cm" value="sec"> Por secciones</label>
+    </div>
+    <div class="kctl" id="size-ctl"><label for="cs">Palabras por fragmento</label><input type="range" id="cs" min="15" max="70" value="35"><b id="csv">35</b></div>
+    <div class="chunks" id="chunks"></div>
+    <p class="note" id="chunk-note" style="margin:10px 0 0"></p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 class="sub">¿En qué formato dejo mis datos?</h3>
+    <div class="sel2"><label for="ft">Tengo</label><select id="ft"></select></div>
+    <div class="fmt" id="fmt"></div>
+  </div>
+</div></section>
+
+<!-- 4 -->
+<section class="s" id="diagnostico"><div class="wrap">
+  <span class="code">/4</span>
+  <h2>Diagnóstico: ¿RAG o no RAG?</h2>
+  <p class="intro">Ocho preguntas sobre tu caso. Al final te digo si RAG es lo que necesitas, si basta con pegar el documento o si un buen prompt resuelve.</p>
+  <div class="card diag" id="diag"></div>
+</div></section>
+
+<!-- 5 -->
+<section class="s" id="herramientas"><div class="wrap">
+  <span class="code">/5</span>
+  <h2>Herramientas para RAG</h2>
+  <p class="intro">Un RAG es una cadena. Toca cada eslabón para ver qué se usa en él.</p>
+  <div class="stages" id="stages"></div>
+  <div class="tooldet" id="tooldet"></div>
+
+  <div class="levels">
+    <div class="card"><span class="tag">Nivel 1</span><h4>Sin programar</h4><p>Cargas los documentos y preguntas. Sirve para probar la idea con pocos archivos.</p>
+      <ul><li>Proyectos de Claude o de ChatGPT con archivos adjuntos</li><li>NotebookLM de Google</li><li>Poco control sobre cómo se fragmenta y qué se recupera</li></ul></div>
+    <div class="card"><span class="tag">Nivel 2</span><h4>Con poco código</h4><p>Un script y librerías para armar el flujo completo con tus documentos.</p>
+      <ul><li>pdfplumber o PyPDF2 para extraer, pandas para tablas</li><li>LangChain o LlamaIndex para fragmentar y conectar</li><li>Chroma o FAISS como índice local</li></ul></div>
+    <div class="card"><span class="tag">Nivel 3</span><h4>A medida</h4><p>Para volúmenes grandes, varios usuarios, permisos y actualización continua.</p>
+      <ul><li>Índice en la nube: Pinecone, Weaviate o Milvus</li><li>Recuperación híbrida y evaluación con preguntas reales</li><li>Control de accesos y registro de fuentes citadas</li></ul></div>
+  </div>
+
+  <div class="gdisc"><b>Manejo de información.</b> Antes de subir documentos a cualquier herramienta, reemplaza nombres, cédulas, NIT, radicados y datos de contacto por marcadores genéricos. No cargues documentos con reserva legal ni información amparada por el secreto profesional en servicios que no lo permitan. La respuesta del sistema es un borrador: verifica cada norma y cada providencia en la fuente oficial.</div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Curso de inmersión en Inteligencia Artificial</span>
+  <span class="powered" style="display:inline-flex;align-items:center;gap:8px"><span>Powered by</span><img src="{{LOGO_PNG}}" alt="" width="22" height="21"><b style="color:#111114;font-weight:600">Next Leap</b></span>
+</div></footer>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---- nav activa ---- */
+(function(){
+  const links=$$(".nav a[href^='#']"), secs=links.map(a=>$(a.getAttribute("href")));
+  if(!("IntersectionObserver" in window)) return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));}})},{rootMargin:"-40% 0px -55% 0px"});
+  secs.forEach(s=>s&&io.observe(s));
+})();
+
+/* ---- 1. grafica ---- */
+const SEG=[
+ {n:"Texto web público",s:"Wikipedia, blogs, noticias",v:25,c:"#0ea5e9",d:"Páginas abiertas de internet. Aporta lenguaje general y cultura, pero también errores y opiniones."},
+ {n:"Libros",s:"de dominio público o licenciados",v:20,c:"#6366f1",d:"Textos largos y cuidados. Aportan estilo, argumentación y conocimiento de fondo."},
+ {n:"Código fuente",s:"GitHub, documentación técnica",v:15,c:"#38bdf8",d:"Programación y documentación técnica. Sirve para razonar paso a paso."},
+ {n:"Foros y conversaciones",s:"Reddit, StackOverflow",v:15,c:"#818cf8",d:"Preguntas y respuestas entre personas. Aportan el tono de la conversación."},
+ {n:"Datos académicos abiertos",s:"arXiv, PubMed, etc.",v:10,c:"#a855f7",d:"Artículos científicos de acceso abierto."},
+ {n:"Entrenamiento supervisado y RLHF",s:"ajuste con retroalimentación humana",v:10,c:"#d946ef",d:"Etapa posterior donde personas califican respuestas para que el modelo sea útil y seguro."},
+ {n:"Sin clasificar",s:"el resto de la torta",v:5,c:"#94a3b8",d:"Porción que la lámina de clase no detalla."}
+];
+(function(){
+  const svg=$(".donut"), cx=160, cy=160, R=150, r=82; let a0=-Math.PI/2, html="";
+  const tot=SEG.reduce((s,x)=>s+x.v,0);
+  SEG.forEach((x,i)=>{
+    const a1=a0+2*Math.PI*x.v/tot, big=(a1-a0)>Math.PI?1:0;
+    const P=(rad,a)=>[cx+rad*Math.cos(a),cy+rad*Math.sin(a)].map(n=>n.toFixed(2)).join(" ");
+    html+=`<path data-i="${i}" fill="${x.c}" tabindex="0" role="button" aria-label="${esc(x.n)} ${x.v}%" d="M ${P(R,a0)} A ${R} ${R} 0 ${big} 1 ${P(R,a1)} L ${P(r,a1)} A ${r} ${r} 0 ${big} 0 ${P(r,a0)} Z"></path>`;
+    a0=a1;
+  });
+  html+=`<text x="160" y="152" text-anchor="middle" font-size="13" fill="#5f6069" font-family="Inter,sans-serif">Datos de</text><text x="160" y="174" text-anchor="middle" font-size="19" font-weight="600" fill="#111114" font-family="Inter,sans-serif">entrenamiento</text>`;
+  svg.innerHTML=html;
+  $("#legend").innerHTML=SEG.map((x,i)=>`<button data-i="${i}"><i style="background:${x.c}"></i><span>${esc(x.n)}<br><small class="note">${esc(x.s)}</small></span><b>${x.v}%</b></button>`).join("");
+  function pick(i){
+    $$(".donut path").forEach(p=>p.classList.toggle("sel",+p.dataset.i===i));
+    $$("#legend button").forEach(b=>b.classList.toggle("sel",+b.dataset.i===i));
+    const x=SEG[i]; $("#seg-detail").innerHTML=`<b>${esc(x.n)} · ${x.v}%</b><br>${esc(x.d)}`;
+  }
+  svg.addEventListener("click",e=>{const p=e.target.closest("path");if(p)pick(+p.dataset.i)});
+  svg.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.dataset.i){e.preventDefault();pick(+e.target.dataset.i)}});
+  $("#legend").addEventListener("click",e=>{const b=e.target.closest("button");if(b)pick(+b.dataset.i)});
+})();
+
+const PROBE=[
+ {q:"Qué es una marca y para qué sirve (concepto general)",r:"in",t:"Sí lo sabe",d:"Es conocimiento público y muy repetido en textos abiertos. Aun así conviene verificar la norma vigente."},
+ {q:"El contrato de licencia que firmó tu cliente la semana pasada",r:"out",t:"No lo sabe",d:"Es un documento privado y nuevo. El modelo nunca lo vio. Solo lo conocerá si se lo das en el prompt o vía RAG."},
+ {q:"Una sentencia publicada hace dos semanas",r:"old",t:"Probablemente no",d:"Pasó después de su fecha de corte. Puede inventar algo que suene parecido, que es peor que no saber."},
+ {q:"El manual interno de tu oficina sobre cómo se abre un caso",r:"out",t:"No lo sabe",d:"Documento interno. Es el caso típico donde RAG aporta valor."},
+ {q:"Una ley que lleva años vigente",r:"old",t:"Puede saberla, pero desactualizada",d:"La conoce como estaba en su entrenamiento. Si fue modificada después, no lo sabe. Verifica en la fuente oficial."},
+ {q:"El estado actual de un trámite ante una entidad",r:"out",t:"No lo sabe",d:"Es información en tiempo real. Ningún entrenamiento la contiene."}
+];
+(function(){
+  let seen=new Set();
+  $("#probe").innerHTML=PROBE.map((p,i)=>`<div class="item" data-i="${i}"><div class="q">${esc(p.q)}<div class="res"><span class="tag ${p.r==='in'?'ok':p.r==='old'?'warn':'bad'}">${esc(p.t)}</span> ${esc(p.d)}</div></div><button class="btn ghost" type="button">Ver respuesta</button></div>`).join("");
+  $("#probe").addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return; const it=b.closest(".item");
+    it.classList.add("open"); b.hidden=true; seen.add(+it.dataset.i);
+    if(seen.size===PROBE.length){const n=PROBE.filter(p=>p.r!=="in").length;$("#probe-score").textContent=`${n} de ${PROBE.length} necesitan que le des las fuentes. Esa es la razón de ser de RAG.`}
+  });
+})();
+
+/* ---- 2. modelo vs rag ---- */
+const FR={
+ F1:{src:"Política de licenciamiento v3 · §4.2",t:"Toda licencia exclusiva de marca requiere aprobación previa del comité de PI y un informe de uso de los últimos 24 meses."},
+ F2:{src:"Política de licenciamiento v3 · §5.1",t:"Las licencias no exclusivas las puede aprobar el director del área, con una regalía mínima del 3 % de las ventas netas."},
+ F3:{src:"Manual de vigilancia de marcas · §2",t:"La gaceta se revisa cada semana y los hallazgos se registran en la matriz de vigilancia el mismo día."},
+ F4:{src:"Manual de vigilancia de marcas · §4",t:"Ante una solicitud similar se abre un caso de oposición y se avisa al cliente dentro de 2 días hábiles."},
+ F5:{src:"Guía de cesión de derechos de autor · §3",t:"La cesión debe constar por escrito e indicar de forma expresa los derechos cedidos, el territorio y el plazo."},
+ F6:{src:"Protocolo de confidencialidad · §1",t:"No se comparten expedientes con herramientas externas sin anonimizar nombres, cédulas y radicados."}
+};
+const QS=[
+ {q:"¿Quién aprueba una licencia exclusiva de marca?",sc:{F1:.91,F2:.78,F5:.44,F4:.31,F3:.22,F6:.15},need:"F1",
+  llm:"Normalmente la aprueba la dirección jurídica o un comité, pero depende de cada organización.",llmw:"Suena razonable, pero no conoce tu política.",
+  rag:"La aprueba el comité de PI, previa presentación de un informe de uso de los últimos 24 meses.",cite:"F1"},
+ {q:"¿En cuánto tiempo avisamos al cliente si aparece una marca parecida?",sc:{F3:.88,F4:.84,F1:.35,F2:.3,F5:.22,F6:.18},need:"F4",
+  llm:"Lo habitual es avisar entre 24 y 72 horas.",llmw:"Inventa un plazo que no es el de tu oficina.",
+  rag:"Se abre un caso de oposición y se avisa al cliente dentro de 2 días hábiles.",cite:"F4"},
+ {q:"¿Puedo pegar un expediente en una herramienta de IA?",sc:{F6:.89,F4:.33,F3:.3,F5:.27,F1:.2,F2:.18},need:"F6",
+  llm:"Depende de la herramienta. Revisa sus condiciones de uso.",llmw:"Correcto en general, pero no dice qué exige tu oficina.",
+  rag:"Solo si antes anonimizas nombres, cédulas y radicados.",cite:"F6"},
+ {q:"¿Cuál es la regalía mínima para una licencia exclusiva?",sc:{F2:.85,F1:.8,F5:.4,F4:.25,F3:.2,F6:.12},need:null,
+  llm:"La regalía mínima suele estar entre el 2 % y el 5 % de las ventas.",llmw:"Responde con seguridad algo que nadie le ha dado.",
+  rag:"No encuentro esa información en los documentos. La política fija una regalía mínima solo para licencias no exclusivas (§5.1).",cite:"F2"}
+];
+const STAGES=[["Pregunta","entra el usuario"],["Embedding","se vuelve vector"],["Búsqueda","por similitud","ret"],["Fragmentos","los más parecidos","ret"],["Prompt","pregunta + fragmentos","gen"],["LLM","redacta","gen"],["Respuesta","con fuentes"]];
+(function(){
+  $("#pipe").innerHTML=STAGES.map((s,i)=>`<div class="st ${s[2]||''}" data-i="${i}">${s[0]}<small>${s[1]}</small></div>`).join("");
+  $("#qs").innerHTML=QS.map((q,i)=>`<button class="chip" data-i="${i}" aria-pressed="false">${esc(q.q)}</button>`).join("");
+  let cur=-1, anim=0;
+  function render(){
+    if(cur<0) return; const q=QS[cur], k=+$("#k").value; $("#kv").textContent=k;
+    const rank=Object.keys(q.sc).sort((a,b)=>q.sc[b]-q.sc[a]), top=rank.slice(0,k);
+    $("#frags").innerHTML=rank.map((id,i)=>`<div class="frag ${top.includes(id)?'used':'dim'}"><span class="n">${top.includes(id)?'#'+(i+1):''}</span><div><span class="src">${esc(FR[id].src)}</span>${esc(FR[id].t)}</div><div class="sc">${q.sc[id].toFixed(2)}<div class="bar"><i style="width:${Math.round(q.sc[id]*100)}%"></i></div></div></div>`).join("");
+    $("#ans-llm").innerHTML=`<h4><span class="tag bad">Sin RAG</span> responde de memoria</h4><p>${esc(q.llm)}</p><p class="note" style="margin-top:6px">${esc(q.llmw)} Sin fuente.</p>`;
+    let txt,c="";
+    if(q.need===null){txt=q.rag;c=`<p class="note" style="margin-top:6px">Los fragmentos se parecen a la pregunta, pero no la responden. Un buen RAG lo reconoce.</p>`}
+    else if(top.includes(q.need)){txt=q.rag+` [${top.indexOf(q.need)+1}]`;c=`<p class="note" style="margin-top:6px">Fuente [${top.indexOf(q.need)+1}]: ${esc(FR[q.need].src)}</p>`}
+    else{txt="No encuentro la respuesta en los fragmentos recuperados.";c=`<p class="note" style="margin-top:6px">El fragmento correcto quedó fuera. Sube k o mejora cómo se fragmentó.</p>`}
+    $("#ans-rag").innerHTML=`<h4><span class="tag ok">Con RAG</span> responde con tus fuentes</h4><p>${esc(txt)}</p>${c}`;
+  }
+  function play(){
+    const my=++anim; const sts=$$("#pipe .st"); sts.forEach(s=>s.classList.remove("act"));
+    sts.forEach((s,i)=>setTimeout(()=>{if(my===anim)s.classList.add("act")},i*260));
+  }
+  $("#qs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cur=+b.dataset.i;$$("#qs .chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));render();play()});
+  $("#k").addEventListener("input",render);
+  $("#cmp tbody").addEventListener("mouseover",e=>{const r=e.target.closest("tr");$$("#cmp tr").forEach(x=>x.classList.toggle("hl",x===r))});
+})();
+
+/* ---- 3. datos ---- */
+(function(){
+  const ST=[["d1","1","Selección"],["d2","2","Procesamiento"],["d3","3","Fragmentación"]];
+  $("#dsteps").innerHTML=ST.map((s,i)=>`<button class="chip" role="tab" data-t="${s[0]}" aria-pressed="${i===0}"><b>${s[1]}</b>${s[2]}</button>`).join("");
+  $("#dsteps").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    $$("#dsteps .chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+    ST.forEach(s=>$("#"+s[0]).hidden=(s[0]!==b.dataset.t)); if(b.dataset.t==="d3")chunk();});
+
+  const CR=[["Relevancia temática","Si es un RAG jurídico: jurisprudencia, normas, manuales legales."],["Confiabilidad","Fuentes oficiales, actualizadas y verificadas: altas cortes, ministerios, manuales internos validados."],["Granularidad útil","Documentos con detalle práctico, no artículos de prensa."],["Formato accesible","Texto digitalizable, no solo imágenes. Si es escaneado, hay que pasar OCR."]];
+  $("#crit").innerHTML=CR.map((c,i)=>`<label><input type="checkbox" data-i="${i}"><div><b>${c[0]}</b><span>${c[1]}</span></div></label>`).join("");
+  $("#crit").addEventListener("change",e=>{
+    $$("#crit label").forEach(l=>l.classList.toggle("on",l.querySelector("input").checked));
+    const n=$$("#crit input:checked").length; $("#crit-score").textContent=`Tu corpus cumple ${n} de 4.`;
+    const w=$("#crit-warn"); w.hidden=n===4;
+    w.innerHTML=n===4?"":"<span>⚠</span><span>Si el corpus no tiene sentido para el caso de uso, el RAG dará respuestas imprecisas aunque la técnica sea correcta. Resuelve lo que falta antes de seguir.</span>";
+  });
+  $("#crit-score").textContent="Tu corpus cumple 0 de 4.";
+
+  const RAW=`Página 3 de 12\nRECLAMO DE COBRO - El señor Pérez presentó una QUEJA el 4/3/2024.\n\nCon base en la petición radicada, la entidad respondió dentro del término.\n\nCordialmente,\nDirectora Jurídica\nFirma: ____________\nPágina 4 de 12\nEl peticionario  insistió en su RECLAMO ante la entidad.`;
+  $("#raw").textContent=RAW;
+  function clean(){
+    const on=k=>$(`#clean-opts [data-c=${k}]`).checked; let t=RAW;
+    if(on("ruido")) t=t.replace(/^P[áa]gina \d+ de \d+\n?/gm,"").replace(/^Cordialmente,\n.*\n.*\n?/m,"").replace(/Firma: _+\n?/g,"");
+    if(on("vocab")) t=t.replace(/\b(QUEJA|RECLAMO|PETICI[ÓO]N|queja|reclamo|petici[óo]n)\b/g,m=>m===m.toUpperCase()?"SOLICITUD":"solicitud");
+    if(on("norm")) t=t.replace(/\b[A-ZÁÉÍÓÚÑ]{3,}(?:\s[A-ZÁÉÍÓÚÑ]{2,})*\b/g,m=>m==="SOLICITUD"?"solicitud":m.charAt(0)+m.slice(1).toLowerCase()).replace(/[ \t]{2,}/g," ").replace(/\n{3,}/g,"\n\n");
+    $("#clean").textContent=t.trim();
+  }
+  $("#clean-opts").addEventListener("change",clean); clean();
+
+  const DOC=[
+   {h:"1. Objeto",t:"El licenciante otorga al licenciatario el derecho de usar la marca en Colombia para distinguir productos de la clase 25."},
+   {h:"2. Plazo",t:"La licencia tiene una duración de cinco años contados desde la firma, prorrogable por acuerdo escrito entre las partes."},
+   {h:"3. Regalías",t:"El licenciatario pagará una regalía trimestral equivalente a un porcentaje de las ventas netas, sin descuentos por devoluciones no documentadas."},
+   {h:"4. Terminación",t:"Cualquiera de las partes puede terminar el contrato por incumplimiento no subsanado dentro de treinta días siguientes al aviso escrito."}];
+  const COL=["#2563eb","#9333ea","#db2777","#d97706","#16a34a","#0e7490"];
+  function words(s){return s.split(/\s+/).filter(Boolean)}
+  function chunk(){
+    const mode=document.querySelector("input[name=cm]:checked").value, size=+$("#cs").value; $("#csv").textContent=size; $("#size-ctl").style.display=mode==="size"?"flex":"none";
+    let out=[];
+    if(mode==="sec"){DOC.forEach((d,i)=>out.push({sec:d.h,t:d.h+" "+d.t}))}
+    else{const all=[]; DOC.forEach(d=>words(d.h+" "+d.t).forEach(w=>all.push({w,sec:d.h})));
+      for(let i=0;i<all.length;i+=size){const part=all.slice(i,i+size); out.push({sec:[...new Set(part.map(x=>x.sec))].join(" + "),t:part.map(x=>x.w).join(" "),mixed:new Set(part.map(x=>x.sec)).size>1,cut:i+size<all.length})}}
+    $("#chunks").innerHTML=out.map((c,i)=>`<div class="chunk" style="border-left-color:${COL[i%COL.length]}"><div class="meta">{doc: "Contrato de licencia de marca", sección: "${esc(c.sec)}", fragmento: ${i+1}, palabras: ${words(c.t).length}}</div>${esc(c.t)}${c.mixed?' <span class="tag warn">mezcla secciones</span>':''}</div>`).join("");
+    const mixed=out.filter(c=>c.mixed).length;
+    $("#chunk-note").textContent=mode==="sec"?"Cada fragmento conserva una idea completa y su sección como metadato. El tamaño varía.":(mixed?`${mixed} fragmento(s) mezclan secciones. Una pregunta sobre «plazo» puede traer también regalías y confundir al generador.`:"Con este tamaño ningún fragmento mezcla secciones, pero puede cortar frases a la mitad. Prueba otro valor.");
+  }
+  $("#cs").addEventListener("input",chunk); $("#chunk-mode").addEventListener("change",chunk); chunk();
+
+  const FM=[["Bases de datos estructuradas",".csv",".xlsx, .json","Fácil lectura e indexación"],["Documentos legales o manuales",".pdf → .txt",".docx","Cuidado con el OCR"],["Texto plano",".txt",".md","Mantener limpio"],["Datos jerárquicos o de una API",".json",".yaml","Preserva la estructura"],["Tablas grandes",".parquet",".csv","Escalable y comprimido"]];
+  $("#ft").innerHTML=FM.map((f,i)=>`<option value="${i}">${esc(f[0])}</option>`).join("");
+  function fm(){const f=FM[+$("#ft").value];$("#fmt").innerHTML=`<div><small>Formato ideal</small><b>${esc(f[1])}</b></div><div><small>Alternativas</small><b>${esc(f[2])}</b></div><div><small>Notas</small><b style="font-size:15px">${esc(f[3])}</b></div>`}
+  $("#ft").addEventListener("change",fm); fm();
+})();
+
+/* ---- 4. diagnostico ---- */
+const DQ=[
+ {q:"¿Las respuestas que necesitas dependen de documentos propios o privados?",h:"Contratos, manuales internos, expedientes, políticas de tu organización.",o:[["Sí, casi todas",{rag:3}],["Algunas",{rag:1}],["No, es conocimiento general",{llm:3}]]},
+ {q:"¿Cuánto material hay?",h:"Piensa en el total de documentos que el sistema debería poder consultar.",o:[["Uno o pocos, caben en una conversación",{paste:3}],["Decenas de documentos",{rag:2}],["Cientos o miles",{rag:3}]]},
+ {q:"¿Con qué frecuencia cambia la información?",h:"Normas, políticas, precios, versiones de contratos.",o:[["Cambia cada semana o cada mes",{rag:2}],["Cambia un par de veces al año",{rag:1}],["Casi no cambia",{paste:1}]]},
+ {q:"¿Necesitas que cada respuesta diga de qué documento y de qué parte salió?",h:"En el ejercicio jurídico casi siempre hace falta poder verificar.",o:[["Sí, es indispensable",{rag:3}],["Sería bueno",{rag:1}],["No hace falta",{llm:1}]]},
+ {q:"¿Qué le vas a pedir principalmente?",h:"Elige lo más frecuente.",o:[["Buscar y consultar datos dentro de los documentos",{rag:2}],["Resumir o redactar a partir de un documento que ya tengo en mano",{paste:2}],["Explicar conceptos, ideas, redacción general",{llm:3}]]},
+ {q:"¿En qué formato están los documentos?",h:"El formato define cuánta preparación hace falta.",o:[["Texto digital: Word, PDF con texto, Excel",{}],["PDF escaneados o fotos",{f:"ocr"}],["Una mezcla y están desordenados",{f:"orden"}]]},
+ {q:"¿Pueden salir los documentos a un servicio externo en la nube?",h:"Piensa en reserva legal, secreto profesional y contratos de confidencialidad.",o:[["Sí, anonimizados",{}],["Solo algunos",{f:"parcial"}],["No, son reservados",{f:"local"}]]},
+ {q:"¿Habrá alguien que mantenga actualizados los documentos?",h:"Un RAG es tan bueno como su corpus.",o:[["Sí, hay una persona responsable",{}],["Se hará cuando se pueda",{f:"mant"}],["No lo hemos pensado",{f:"mant"}]]}
+];
+const FLAGS={
+ ocr:"Pasa los escaneados por OCR (Tesseract o Adobe) y revisa el texto resultante. Un OCR con errores contamina el índice.",
+ orden:"Ordena el material, elimina duplicados y define cuáles son las versiones vigentes antes de indexar.",
+ parcial:"Separa desde ya los documentos que pueden salir de los reservados y trabaja solo con los primeros.",
+ local:"Con documentos reservados, el índice y el modelo deben correr en tu propia infraestructura o con un contrato que lo permita. No los subas a herramientas públicas.",
+ mant:"Nombra a una persona responsable y fija cada cuánto se revisa el corpus. Sin eso, el sistema responde con documentos viejos."
+};
+(function(){
+  const root=$("#diag"); let i=0, sc, fl, ans;
+  function start(){i=0;sc={rag:0,paste:0,llm:0};fl=new Set();ans=[];ask()}
+  function ask(){
+    const d=DQ[i];
+    root.innerHTML=`<div class="prog"><i style="width:${i/DQ.length*100}%"></i></div><span class="qn">Pregunta ${i+1} de ${DQ.length}</span><div class="dq">${esc(d.q)}</div><p class="dh">${esc(d.h)}</p>`+d.o.map((o,j)=>`<button class="dopt" data-j="${j}">${esc(o[0])}</button>`).join("")+(i>0?`<p style="margin:14px 0 0"><button class="btn ghost" data-back="1">Atrás</button></p>`:"");
+  }
+  function done(){
+    const m=Math.max(sc.rag,sc.paste,sc.llm); let v;
+    if(sc.rag===m&&sc.rag>sc.paste&&sc.rag>=sc.llm) v="rag"; else if(sc.paste===m&&sc.paste>=sc.llm) v="paste"; else if(sc.llm===m&&sc.llm>sc.rag) v="llm"; else v=sc.rag>=sc.paste?"rag":"paste";
+    if(sc.rag>=6&&sc.paste<=3) v="rag";
+    const T={
+      rag:["Sí, RAG","Tu caso depende de documentos propios, en cantidad suficiente o cambiantes, y necesitas poder citar la fuente. Un modelo solo no te sirve y pegar archivos en una conversación se quedaría corto.","Primer paso: escribe entre 10 y 20 preguntas reales que el sistema debería poder contestar. Serán tu prueba de calidad."],
+      paste:["Todavía no: pega el documento","Tienes poco material o necesitas trabajar sobre un documento concreto. Pégalo o adjúntalo en la conversación con un buen prompt RCI. Montar un RAG hoy sería más trabajo que valor.","Cuando el material crezca, cambie seguido o lo consulten varias personas, vuelve a hacer el diagnóstico."],
+      llm:["No necesitas RAG","Tu tarea es de conocimiento general o de redacción. Un buen prompt con Rol, Contexto e Instrucción rinde más que montar un sistema de recuperación.","Si más adelante necesitas respuestas con fuentes propias, vuelve a hacer el diagnóstico."]
+    }[v];
+    const mt=[["Pide RAG",sc.rag,"#00522c"],["Basta pegar el documento",sc.paste,"#2563eb"],["Basta un buen prompt",sc.llm,"#7c3aed"]];
+    const mx=Math.max(1,...mt.map(x=>x[1]));
+    root.innerHTML=`<div class="prog"><i style="width:100%"></i></div><div class="verdict ${v==='rag'?'':v}"><span class="tag">Resultado</span><h3>${T[0]}</h3><p style="margin:0 0 8px">${T[1]}</p><p style="margin:0"><b>${T[2]}</b></p></div><div class="meter">${mt.map(x=>`<div><span>${x[0]}</span><span class="b"><i style="width:${x[1]/mx*100}%;background:${x[2]}"></i></span><b>${x[1]}</b></div>`).join("")}</div>${fl.size?`<div class="before"><h3 class="sub">Antes de empezar</h3><ul>${[...fl].map(f=>`<li>${esc(FLAGS[f])}</li>`).join("")}</ul></div>`:""}<p style="margin:16px 0 0"><button class="btn" data-restart="1">Hacer el diagnóstico otra vez</button></p>`;
+  }
+  root.addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.restart) return start();
+    if(b.dataset.back){ if(i>0){i--;const p=ans.pop();for(const k in p.s) if(k!=="f") sc[k]-=p.s[k]; if(p.s.f) fl.delete(p.s.f); ask();} return;}
+    if(b.dataset.j===undefined) return;
+    const s=DQ[i].o[+b.dataset.j][1]; ans.push({s}); for(const k in s){ if(k==="f") fl.add(s.f); else sc[k]+=s[k]; }
+    i++; i<DQ.length?ask():done();
+  });
+  start();
+})();
+
+/* ---- 5. herramientas ---- */
+const TS=[
+ {n:"Extraer",d:"Sacar el texto de los documentos.",t:[["pdfplumber","PDF"],["PyPDF2","PDF"],["pandas","csv, xlsx"],["python-docx","Word"]]},
+ {n:"OCR",d:"Solo si el PDF es una imagen escaneada. Revisa siempre el resultado.",t:[["Tesseract","libre"],["Adobe OCR","comercial"]]},
+ {n:"Limpiar y fragmentar",d:"Quitar ruido, unificar vocabulario y partir en fragmentos de 300 a 500 palabras con metadatos.",t:[["Script propio","Python"],["LangChain","fragmentadores"],["LlamaIndex","fragmentadores"]]},
+ {n:"Embeddings",d:"Convertir cada fragmento en un vector que capture su significado.",t:[["Modelo de embeddings de un proveedor","nube"],["sentence-transformers","abierto, local"]]},
+ {n:"Indexar",d:"Guardar los vectores en una «biblioteca semántica» que encuentra textos parecidos aunque no compartan las mismas palabras.",t:[["FAISS","local"],["Chroma","simple"],["Pinecone","nube"],["Weaviate","nube"],["Milvus","nube"]]},
+ {n:"Recuperar",d:"Buscar los fragmentos más útiles para la pregunta.",t:[["BM25","clásica, por palabras"],["Dense retrieval","por vectores"],["Híbrida","combina ambas"]]},
+ {n:"Generar",d:"El LLM recibe la pregunta y los fragmentos y redacta la respuesta citando la fuente.",t:[["Claude","Anthropic"],["GPT","OpenAI"],["Gemini","Google"],["Modelos abiertos","locales"]]}
+];
+(function(){
+  $("#stages").innerHTML=TS.map((s,i)=>`<button class="chip" data-i="${i}" aria-pressed="${i===0}"><span class="code">${i+1}</span>${esc(s.n)}</button>`).join("");
+  function show(i){const s=TS[i];$("#tooldet").innerHTML=`<h4>${i+1}. ${esc(s.n)}</h4><p>${esc(s.d)}</p><div class="tools">${s.t.map(t=>`<span class="tl">${esc(t[0])}<small>${esc(t[1])}</small></span>`).join("")}</div>`}
+  $("#stages").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;$$("#stages .chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));show(+b.dataset.i)});
+  show(0);
+})();
+window.addEventListener("error",e=>{document.title="ERR "+e.message});
+</script>
+</body>
+</html>

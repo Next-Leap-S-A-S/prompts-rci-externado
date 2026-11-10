@@ -89,6 +89,10 @@ def main():
     hub = (hub.replace("{{INST_BAND}}", inst_band()).replace("{{FONT_CSS}}", font_css())
               .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png")))
     (ROOT / "index.html").write_text(asciify(hub), encoding="ascii")
+    rag = (SRC / "rag.html").read_text(encoding="utf-8")
+    rag = (rag.replace("{{INST_BAND}}", inst_band()).replace("{{FONT_CSS}}", font_css())
+              .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png")))
+    (ROOT / "sesion-rag.html").write_text(asciify(rag), encoding="ascii")
     n = len(re.findall(r'^\{a:"', prompts_js(), flags=re.M))
     print(f"ok: {OUT} ({OUT.stat().st_size:,} bytes, {n} prompts)")
 
