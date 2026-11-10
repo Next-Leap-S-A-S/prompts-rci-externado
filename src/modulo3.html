@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo 3: Gestión de organizaciones jurídicas | Curso de inmersión en Inteligencia Artificial</title>
+<meta name="description" content="Cómo se opera un área jurídica como un sistema: la lógica de Harvey, Amaranta, ClickUp y un CLM trabajando juntos.">
+<style>
+{{FONT_CSS}}
+:root{--bg:#fff;--bg1:#fafafa;--ink:#111114;--ink75:#43444c;--ink60:#5f6069;--line:rgba(0,0,0,.09);--line2:rgba(0,0,0,.16);--surf:rgba(0,0,0,.022);
+--g:#00522c;--g2:#78b92f;--gs:#eef5f0;--ret:#e11d48;--gen:#d97706;--dat:#2563eb;--ok:#16a34a;--bad:#dc2626}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Inter',system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+.code{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60);letter-spacing:.02em}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.nav{position:sticky;top:0;z-index:20;background:#ffffffee;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:8px;padding-bottom:8px}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;font-size:14px;color:var(--ink60);padding:6px 11px;border-radius:7px}
+.nav a:hover{background:rgba(0,0,0,.05);color:var(--ink)}
+.nav a.on{background:var(--gs);color:var(--g);font-weight:600}
+.nav a.back{font-weight:600;color:var(--ink);margin-right:6px}
+header.hero{padding:56px 0 28px}
+h1{font-size:clamp(30px,6vw,52px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 14px;font-weight:600}
+h1 em{font-style:normal;background:linear-gradient(135deg,#00522c,#78b92f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink60);max-width:64ch;font-size:18px;margin:0}
+section.s{padding:56px 0 8px;scroll-margin-top:52px}
+section.s>.wrap>h2{font-size:clamp(24px,4vw,34px);letter-spacing:-.015em;margin:6px 0 8px;font-weight:600;line-height:1.15}
+.intro{color:var(--ink60);max-width:66ch;margin:0 0 22px}
+.card{border:1px solid var(--line);background:var(--surf);border-radius:14px;padding:20px}
+.grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.chip{border:1px solid var(--line2);background:#fff;border-radius:99px;padding:7px 13px;font-size:14px;color:var(--ink75)}
+.chip:hover{border-color:var(--g)}
+.chip[aria-pressed="true"],.chip.on{background:var(--g);border-color:var(--g);color:#fff}
+.btn{background:var(--g);color:#fff;border:0;border-radius:9px;padding:10px 16px;font-weight:600;font-size:15px}
+.btn:hover{background:#003d20}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line2)}
+.btn.ghost:hover{border-color:var(--g);background:#fff}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--gs);color:var(--g)}
+.tag.bad{background:#fee2e2;color:#991b1b}.tag.ok{background:#dcfce7;color:#166534}.tag.warn{background:#fef3c7;color:#92400e}
+.note{font-size:13px;color:var(--ink60)}
+
+
+/* 4 diagnostico */
+.diag{max-width:720px}
+.prog{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.prog i{display:block;height:100%;background:var(--g);transition:width .3s}
+.qn{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60)}
+.dq{font-size:22px;line-height:1.25;margin:6px 0 6px;font-weight:600;letter-spacing:-.01em}
+.dh{color:var(--ink60);font-size:15px;margin:0 0 14px}
+.dopt{display:block;width:100%;text-align:left;border:1.5px solid var(--line2);background:#fff;border-radius:11px;padding:13px 15px;margin-top:8px;font-size:16px;transition:.15s}
+.dopt:hover{border-color:var(--g);background:var(--gs)}
+.verdict{border-radius:14px;padding:20px;border:2px solid var(--g);background:var(--gs)}
+.verdict.paste{border-color:var(--dat);background:#eff6ff}
+.verdict.llm{border-color:#7c3aed;background:#f5f3ff}
+.verdict h3{margin:4px 0 6px;font-size:26px;letter-spacing:-.01em}
+.meter{display:grid;gap:6px;margin:14px 0}
+.meter div{display:grid;grid-template-columns:150px 1fr 28px;gap:10px;align-items:center;font-size:13px}
+.meter .b{height:8px;background:#0000000f;border-radius:5px;overflow:hidden}
+.meter .b i{display:block;height:100%;border-radius:5px}
+.before{margin-top:14px}
+.before ul{margin:6px 0 0;padding-left:20px}.before li{margin:5px 0;font-size:15px}
+
+
+.qrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+:root{--hv:#2563eb;--am:#00522c;--cu:#9333ea;--cl:#d97706}
+/* 1 arquitectura */
+.tchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tchips .chip{display:flex;align-items:center;gap:8px}
+.tchips .chip i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.tchips .chip[aria-pressed="true"] i{box-shadow:0 0 0 2px #fff}
+.arch{display:grid;gap:10px}
+.arch .row{display:grid;gap:10px}
+.arch .r3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.arch .lab{font:500 11.5px 'IBM Plex Mono',monospace;color:var(--ink60);text-transform:uppercase;letter-spacing:.04em;margin-bottom:-4px}
+.blk{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:12px 14px;transition:.2s;position:relative}
+.blk b{display:block;font-size:15.5px}
+.blk span{display:block;font-size:13.5px;color:var(--ink60);margin-top:2px}
+.blk em{display:block;margin-top:8px;font-style:normal;font-size:12px;font-weight:600;color:var(--ink60)}
+.blk.l0{opacity:.4}
+.blk.l1{border-style:dashed}
+.arrow{text-align:center;color:var(--ink60);font-size:18px;line-height:1}
+.tdesc{margin:12px 0 0;padding:12px 14px;border-left:3px solid var(--g);background:var(--gs);border-radius:0 9px 9px 0;font-size:15px}
+/* 2 matriz */
+.mx{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.mrow{display:grid;grid-template-columns:1fr repeat(4,64px);gap:6px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.mrow.head{cursor:default;background:var(--bg1);font-size:12px;font-weight:600;color:var(--ink60);text-align:center}
+.mrow.head span:first-child{text-align:left}
+.mrow label{display:flex;gap:10px;align-items:center;cursor:pointer;font-size:15px}
+.mrow input{accent-color:var(--g);width:18px;height:18px;flex:none}
+.mrow.on{background:var(--gs)}
+.dot{justify-self:center;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.dot.d2{background:var(--ok)}.dot.d1{background:#d97706}.dot.d0{background:#cbd5e1;color:#64748b}
+@media(max-width:560px){.mrow{grid-template-columns:1fr repeat(4,38px);padding:10px 8px}.mrow.head{font-size:10px}}
+.bars{padding:14px 16px;border-top:1px solid var(--line);background:var(--bg1);display:grid;gap:8px}
+.bars div{display:grid;grid-template-columns:130px 1fr 34px;gap:10px;align-items:center;font-size:13.5px}
+.bars .b{height:10px;border-radius:6px;background:#0000000f;overflow:hidden}
+.bars .b i{display:block;height:100%;border-radius:6px;transition:width .3s}
+.bars p{margin:4px 0 0;font-weight:600;font-size:15px}
+/* 3 ciclo CLM */
+.cyc{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cyc button{flex:1 1 110px;text-align:left;border:1.5px solid var(--line2);background:#fff;border-radius:10px;padding:8px 10px;font-size:13.5px;line-height:1.25}
+.cyc button b{display:block;font:600 11.5px 'IBM Plex Mono',monospace;color:var(--ink60)}
+.cyc button[aria-pressed="true"]{border-color:var(--cl);background:#fffbeb;box-shadow:0 0 0 3px #d977061a}
+.cdet{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.cdet>div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;border-top:4px solid var(--line2)}
+.cdet .ia{border-top-color:var(--hv)}.cdet .pe{border-top-color:var(--ok)}.cdet .rg{border-top-color:var(--cu)}.cdet .al{border-top-color:var(--bad)}
+.cdet h4{margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink60)}
+.cdet p{margin:0;font-size:15px}
+.rule{margin-top:12px;font-weight:600}
+/* 4 tablero */
+.board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0}
+@media(max-width:760px){.board{grid-template-columns:1fr}}
+.col{background:var(--bg1);border:1px solid var(--line);border-radius:10px;padding:8px;min-height:120px}
+.col h5{margin:0 0 8px;font-size:12px;color:var(--ink60);text-transform:uppercase;letter-spacing:.04em}
+.col.act{border-color:var(--cu);background:#faf5ff}
+.tk{background:#fff;border:1px solid var(--cu);border-radius:8px;padding:8px 10px;font-size:13.5px;box-shadow:0 2px 8px #9333ea22}
+.tk small{display:block;color:var(--ink60);margin-top:2px}
+.tinfo{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));margin:12px 0}
+.tinfo div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.tinfo small{display:block;color:var(--ink60);font-size:12px;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.stnote{padding:10px 14px;border-left:3px solid var(--cu);background:#faf5ff;border-radius:0 9px 9px 0;font-size:15px;min-height:46px}
+/* 5 madurez */
+.mad{max-width:760px}
+.radar{width:100%;max-width:420px;margin:0 auto;display:block}
+.dimr{display:grid;gap:8px;margin:14px 0}
+.dimr div{display:grid;grid-template-columns:150px 1fr 120px;gap:10px;align-items:center;font-size:14px}
+.dimr .b{height:9px;background:#0000000f;border-radius:5px;overflow:hidden}.dimr .b i{display:block;height:100%;background:var(--g);border-radius:5px}
+.dimr small{color:var(--ink60)}
+@media(max-width:560px){.dimr div{grid-template-columns:110px 1fr}.dimr small{display:none}}
+.next{margin-top:14px}.next li{margin:6px 0;font-size:15px}
+.gdisc{margin-top:34px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg1);font-size:14px;color:var(--ink60)}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:20px 0 44px;color:var(--ink60);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+</style>
+</head>
+<body>
+{{INST_BAND}}
+<nav class="nav" aria-label="Secciones del módulo"><div class="wrap">
+  <a class="back" href="index.html">&larr; Curso</a>
+  <a href="#logica">1 · La lógica</a>
+  <a href="#mapa">2 · Qué herramienta para qué</a>
+  <a href="#clm">3 · Ciclo del contrato</a>
+  <a href="#trabajo">4 · El flujo de trabajo</a>
+  <a href="#madurez">5 · Diagnóstico</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="code">/módulo 3</span>
+  <h1>Gestión de <em>organizaciones jurídicas</em></h1>
+  <p class="lead">Un área jurídica funciona como un sistema. Recibe solicitudes, guarda conocimiento, produce documentos, reparte trabajo y rinde cuentas. Este módulo junta cuatro piezas que casi siempre se compran por separado: la lógica de Harvey, Amaranta, ClickUp y un CLM.</p>
+</div></header>
+
+<section class="s" id="logica"><div class="wrap">
+  <span class="code">/1</span>
+  <h2>Un punto de entrada y tres sistemas de registro</h2>
+  <p class="intro">Comprar cuatro herramientas no es tener una organización. Es tener cuatro lugares donde buscar. Elige una pieza y mira qué parte del sistema cubre.</p>
+  <div class="tchips" id="tchips" role="tablist"></div>
+  <div class="card">
+    <div class="arch" id="arch"></div>
+    <div class="tdesc" id="tdesc" aria-live="polite"></div>
+  </div>
+  <p class="note" style="margin:10px 0 0">Borde continuo: lo cubre. Borde punteado: lo cubre en parte. Atenuado: no es su trabajo. Harvey es una plataforma comercial de IA jurídica. Aquí tomamos sus patrones de trabajo, no su producto ni su marca.</p>
+</div></section>
+
+<section class="s" id="mapa"><div class="wrap">
+  <span class="code">/2</span>
+  <h2>¿Qué herramienta para qué?</h2>
+  <p class="intro">Tilda lo que tu área necesita resolver y mira cuánto cubre cada pieza. Ninguna lo cubre todo. Por eso se integran.</p>
+  <div class="mx" id="mx"></div>
+  <p class="note" style="margin:10px 0 0">Calificación orientativa para la clase. Cambia según el producto concreto y según cómo se configure.</p>
+</div></section>
+
+<section class="s" id="clm"><div class="wrap">
+  <span class="code">/3</span>
+  <h2>El ciclo de vida de un contrato</h2>
+  <p class="intro">Un CLM (contract lifecycle management) acompaña el contrato desde que alguien lo pide hasta que se renueva o se cierra. Toca cada etapa y mira qué hace la IA, qué decide una persona y qué queda registrado.</p>
+  <div class="cyc" id="cyc"></div>
+  <div class="cdet" id="cdet"></div>
+  <p class="rule">La IA propone. La persona decide. El sistema recuerda.</p>
+</div></section>
+
+<section class="s" id="trabajo"><div class="wrap">
+  <span class="code">/4</span>
+  <h2>El flujo de trabajo: de la solicitud al archivo</h2>
+  <p class="intro">Aquí manda la lógica de ClickUp. Cada pedido necesita un tipo, un responsable, un plazo y un estado. Elige una solicitud y avanza la tarjeta por el tablero.</p>
+  <div class="card">
+    <div class="qrow" id="rtypes"></div>
+    <div class="tinfo" id="rinfo"></div>
+    <div class="board" id="board"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px"><button class="btn" id="adv" type="button">Avanzar de estado</button><button class="btn ghost" id="rst" type="button">Volver a empezar</button></div>
+    <div class="stnote" id="stnote" aria-live="polite"></div>
+    <p class="note" style="margin:10px 0 0">Configuración de ejemplo. Los plazos legales marcados con [verificar] se confirman en la norma antes de usarlos.</p>
+  </div>
+</div></section>
+
+<section class="s" id="madurez"><div class="wrap">
+  <span class="code">/5</span>
+  <h2>Diagnóstico: ¿qué tan organizada está tu área jurídica?</h2>
+  <p class="intro">Diez preguntas sobre cinco dimensiones. Al final ves tu radar y por dónde empezar.</p>
+  <div class="card mad" id="mad"></div>
+  <div class="gdisc"><b>Manejo de información.</b> Antes de cargar un asunto en cualquier herramienta, anonimiza nombres, cédulas, NIT, radicados y datos de contacto. Los documentos con reserva legal o secreto profesional solo entran donde un contrato lo permita. Lo que produce la IA es un borrador y la decisión es de la persona responsable.</div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Curso de inmersión en Inteligencia Artificial</span>
+  <span class="powered" style="display:inline-flex;align-items:center;gap:8px"><span>Powered by</span><img src="{{LOGO_PNG}}" alt="" width="22" height="21"><b style="color:#111114;font-weight:600">Next Leap</b></span>
+</div></footer>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+(function(){
+  const links=$$(".nav a[href^='#']"), secs=links.map(a=>$(a.getAttribute("href")));
+  if(!("IntersectionObserver" in window)) return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));}})},{rootMargin:"-40% 0px -55% 0px"});
+  secs.forEach(s=>s&&io.observe(s));
+})();
+
+/* ---- 1. arquitectura ---- */
+const TOOLS=[
+ {k:"H",n:"Lógica Harvey",c:"#2563eb",d:"Un solo punto de entrada. El trabajo se organiza por asunto, los flujos se repiten y cada respuesta cita su fuente. Una persona aprueba. Es un patrón, no un producto que se instale."},
+ {k:"A",n:"Amaranta",c:"#00522c",d:"La misma lógica para cualquier organización jurídica. El Inicio es el chat. Alrededor tiene asuntos y expedientes, contratos con su CLM, base de conocimiento con fuentes verificadas y herramientas como el generador de actas."},
+ {k:"C",n:"ClickUp",c:"#9333ea",d:"El sistema de trabajo. Solicitudes, tareas, estados, plazos y tableros. No sabe de derecho. Sabe de procesos, y eso es justo lo que a muchas áreas jurídicas les falta."},
+ {k:"L",n:"CLM",c:"#d97706",d:"El sistema de contratos. Acompaña el documento desde el pedido hasta la renovación, con fechas, obligaciones, aprobaciones y firma. Su fuerte es la cartera, no la conversación."}
+];
+const BLK=[
+ {row:0,t:"Asistente único",s:"Chat, @asunto y /flujo. Aquí pregunta y pide todo el mundo.",v:{H:2,A:2,C:0,L:0}},
+ {row:1,t:"Conocimiento",s:"Documentos, normas, playbooks y cláusulas aprobadas.",v:{H:2,A:2,C:0,L:1}},
+ {row:1,t:"Asuntos y expedientes",s:"Partes, documentos y actuaciones de cada asunto.",v:{H:1,A:2,C:1,L:0}},
+ {row:1,t:"Contratos",s:"Cartera, fechas, aprobaciones, firma y obligaciones.",v:{H:0,A:2,C:0,L:2}},
+ {row:1,t:"Trabajo y plazos",s:"Solicitudes, tareas, responsables y estados.",v:{H:0,A:1,C:2,L:1}},
+ {row:2,t:"Reportes y alertas",s:"Volumen, tiempos, riesgo y vencimientos para la dirección.",v:{H:0,A:1,C:2,L:2}}
+];
+(function(){
+  const LAB=["Entrada","Sistemas de registro","Control"], MARK=["No es su trabajo","Cubre en parte","Lo cubre"];
+  $("#tchips").innerHTML=TOOLS.map((t,i)=>`<button class="chip" data-k="${t.k}" aria-pressed="${t.k==='A'}"><i style="background:${t.c}"></i>${esc(t.n)}</button>`).join("");
+  function draw(k){
+    const t=TOOLS.find(x=>x.k===k);
+    let h="";
+    [0,1,2].forEach(r=>{
+      h+=`<div class="lab">${LAB[r]}</div><div class="row ${r===1?'r3':''}" style="${r===1?'':'grid-template-columns:1fr'}">`;
+      BLK.filter(b=>b.row===r).forEach(b=>{const l=b.v[k];
+        h+=`<div class="blk l${l}" style="${l?`border-color:${t.c};${l===2?`background:${t.c}12`:''}`:''}"><b>${esc(b.t)}</b><span>${esc(b.s)}</span><em>${MARK[l]}</em></div>`});
+      h+="</div>"+(r<2?'<div class="arrow" aria-hidden="true">&darr;</div>':"");
+    });
+    $("#arch").innerHTML=h; $("#tdesc").innerHTML=`<b>${esc(t.n)}.</b> ${esc(t.d)}`;
+    $$("#tchips .chip").forEach(c=>c.setAttribute("aria-pressed",String(c.dataset.k===k)));
+  }
+  $("#tchips").addEventListener("click",e=>{const b=e.target.closest("button");if(b)draw(b.dataset.k)});
+  draw("A");
+})();
+
+/* ---- 2. matriz ---- */
+const NEEDS=[
+ ["Preguntar en lenguaje natural sobre documentos y normas",{H:2,A:2,C:0,L:1}],
+ ["Recibir solicitudes de las áreas con un formulario",{H:0,A:2,C:2,L:1}],
+ ["Llevar el expediente de cada asunto",{H:1,A:2,C:1,L:0}],
+ ["Redactar y revisar contratos con playbooks",{H:2,A:2,C:0,L:1}],
+ ["Cartera de contratos con fechas y renovaciones",{H:0,A:2,C:0,L:2}],
+ ["Asignar tareas, plazos y responsables",{H:0,A:1,C:2,L:1}],
+ ["Aprobaciones y firma electrónica",{H:0,A:1,C:1,L:2}],
+ ["Tableros y reportes para la dirección",{H:0,A:1,C:2,L:2}]
+];
+(function(){
+  const ds=v=>`<span class="dot d${v}" title="${['No','En parte','Sí'][v]}">${['&ndash;','&frac12;','&#10003;'][v]}</span>`;
+  const head=`<div class="mrow head"><span>Necesidad</span>${TOOLS.map(t=>`<span style="color:${t.c}">${t.k==='H'?'Harvey':t.n}</span>`).join("")}</div>`;
+  $("#mx").innerHTML=head+NEEDS.map((n,i)=>`<label class="mrow"><span style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-i="${i}">${esc(n[0])}</span>${TOOLS.map(t=>ds(n[1][t.k])).join("")}</label>`).join("")+`<div class="bars" id="bars"><p>Marca al menos una necesidad.</p></div>`;
+  $("#mx").addEventListener("change",()=>{
+    const on=$$("#mx input:checked").map(x=>+x.dataset.i);
+    $$("#mx label.mrow").forEach((r,i)=>r.classList.toggle("on",on.includes(i)));
+    if(!on.length){$("#bars").innerHTML="<p>Marca al menos una necesidad.</p>";return}
+    const tot=on.length*2, sc=TOOLS.map(t=>({t,v:on.reduce((s,i)=>s+NEEDS[i][1][t.k],0)}));
+    const best=Math.max(...sc.map(x=>x.v));
+    $("#bars").innerHTML=sc.map(x=>`<div><span>${esc(x.t.n)}</span><span class="b"><i style="width:${x.v/tot*100}%;background:${x.t.c}"></i></span><b>${x.v}/${tot}</b></div>`).join("")+`<p>${best===tot?"Una pieza cubre todo lo que marcaste. Revisa que no estés pidiendo poco.":"Ninguna cubre todo lo que marcaste. La mejor llega a "+best+" de "+tot+". El resto se resuelve conectando piezas."}</p>`;
+  });
+})();
+
+/* ---- 3. ciclo CLM ---- */
+const CY=[
+ ["Solicitud","Clasifica el tipo de contrato y pide los datos que faltan.","El área solicitante confirma el objeto y la contraparte.","Área, tipo, valor estimado y fecha deseada.","Solicitud sin los datos mínimos."],
+ ["Redacción","Arma el borrador desde la plantilla y las cláusulas aprobadas.","El abogado elige la plantilla y ajusta las condiciones.","Versión 1 y plantilla usada.","Cláusula que no está en la biblioteca."],
+ ["Revisión","Compara contra el playbook y marca cada desviación.","El abogado acepta o rechaza cada cambio.","Cambios y motivo de cada decisión.","Desviación grave frente al playbook."],
+ ["Negociación","Resume la contrapropuesta y sugiere una respuesta.","Quien negocia define hasta dónde se cede.","Versiones y control de cambios.","Cláusula fuera del margen autorizado."],
+ ["Aprobación","Resume los riesgos para quien aprueba.","El aprobador decide según el flujo por cuantía y riesgo.","Quién aprobó, cuándo y con qué condiciones.","Aprobación pendiente que se acerca al plazo."],
+ ["Firma","Verifica que lo que se firma es la última versión.","Los firmantes autorizados firman.","Documento firmado y fecha.","Firmantes que faltan."],
+ ["Ejecución","Extrae obligaciones, plazos y entregables.","El responsable del contrato cumple y reporta.","Calendario de obligaciones.","Obligación próxima a vencer."],
+ ["Renovación o cierre","Avisa el vencimiento y resume cómo fue la relación.","Se decide renovar, renegociar o terminar.","Decisión y motivo.","Aviso previo de no renovación que corre."]
+];
+(function(){
+  $("#cyc").innerHTML=CY.map((c,i)=>`<button data-i="${i}" aria-pressed="${i===0}"><b>${i+1}</b>${esc(c[0])}</button>`).join("");
+  function show(i){const c=CY[i];
+    $("#cdet").innerHTML=`<div class="ia"><h4>Qué hace la IA</h4><p>${esc(c[1])}</p></div><div class="pe"><h4>Qué decide una persona</h4><p>${esc(c[2])}</p></div><div class="rg"><h4>Qué queda registrado</h4><p>${esc(c[3])}</p></div><div class="al"><h4>Cuándo salta una alerta</h4><p>${esc(c[4])}</p></div>`;
+    $$("#cyc button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.i===i)));}
+  $("#cyc").addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(+b.dataset.i)});
+  show(0);
+})();
+
+/* ---- 4. tablero ---- */
+const RT=[
+ {n:"Contrato de licencia de marca",p:"Media",r:"Abogado de contratos",pl:"10 días hábiles para el primer borrador",l:"Contratos",c:["Contraparte","Marca y clases","Territorio y plazo","Regalía"],a:"Al pasar a revisión se asigna una segunda persona y se crea la ficha en el CLM."},
+ {n:"Consulta rápida de un área",p:"Baja",r:"Abogado de turno",pl:"2 días hábiles",l:"Consultas",c:["Área solicitante","Pregunta","Documentos adjuntos"],a:"Si la misma respuesta se da tres veces, se propone convertirla en una entrada de la base de conocimiento."},
+ {n:"Oposición a una solicitud de marca",p:"Alta",r:"Abogado de marcas",pl:"30 días hábiles desde la publicación en la gaceta [verificar]",l:"Vigilancia",c:["Marca citada","Marca propia","Fecha de publicación","Cliente"],a:"El plazo se cuenta desde la publicación y avisa cuando faltan 10 y 3 días."},
+ {n:"Respuesta a un derecho de petición",p:"Alta",r:"Abogado de turno con revisión del socio",pl:"El término depende del tipo de petición [verificar]",l:"Peticiones",c:["Entidad","Fecha de recibido","Tipo de petición","Hechos"],a:"El término corre desde el recibido y avisa cuando va por la mitad."}
+];
+const ST=[["Nuevo","Llega por el formulario con los campos obligatorios. Sin ellos no entra."],["En triage","Se clasifica, se fija la prioridad y se asigna un responsable."],["En trabajo","El responsable produce con apoyo del asistente."],["En revisión","Una segunda persona aprueba. La IA no cierra nada."],["Hecho","Se archiva en el expediente y alimenta el reporte."]];
+(function(){
+  let cur=0, st=0;
+  $("#rtypes").innerHTML=RT.map((r,i)=>`<button class="chip" data-i="${i}" aria-pressed="${i===0}">${esc(r.n)}</button>`).join("");
+  function render(){
+    const r=RT[cur];
+    $("#rinfo").innerHTML=`<div><small>Prioridad</small>${esc(r.p)}</div><div><small>Responsable</small>${esc(r.r)}</div><div><small>Plazo</small>${esc(r.pl)}</div><div><small>Lista</small>${esc(r.l)}</div><div><small>Campos obligatorios</small>${r.c.map(esc).join(", ")}</div><div><small>Automatización</small>${esc(r.a)}</div>`;
+    $("#board").innerHTML=ST.map((s,i)=>`<div class="col ${i===st?'act':''}"><h5>${s[0]}</h5>${i===st?`<div class="tk">${esc(r.n)}<small>${esc(r.r)}</small></div>`:''}</div>`).join("");
+    $("#stnote").innerHTML=`<b>${ST[st][0]}.</b> ${esc(ST[st][1])}`;
+    $("#adv").disabled=st===ST.length-1; $("#adv").style.opacity=st===ST.length-1?.5:1;
+  }
+  $("#rtypes").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cur=+b.dataset.i;st=0;$$("#rtypes .chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));render()});
+  $("#adv").addEventListener("click",()=>{if(st<ST.length-1){st++;render()}});
+  $("#rst").addEventListener("click",()=>{st=0;render()});
+  render();
+})();
+
+/* ---- 5. madurez ---- */
+const DIM=["Recibir","Conocimiento","Contratos","Gestión del trabajo","Gobierno de IA"];
+const MQ=[
+ [0,"¿Cómo llegan hoy las solicitudes a legal?",["Por WhatsApp, correo y pasillo","Por correo, a veces con copia a varios","Por un buzón único con responsable","Por un formulario con campos obligatorios y asignación"]],
+ [0,"¿Sabes cuántas solicitudes tienes abiertas y hace cuánto?",["No","Más o menos, de memoria","Sí, en una hoja de cálculo","Sí, en un tablero que se actualiza solo"]],
+ [1,"¿Dónde viven tus modelos, cláusulas y conceptos anteriores?",["En la cabeza y los correos de cada abogado","En carpetas compartidas sin orden fijo","En una biblioteca con responsables y versiones","En una base consultable con IA y citas a la fuente"]],
+ [1,"¿Tus abogados usan IA?",["No","Cada uno por su cuenta y sin reglas","Con herramientas aprobadas y reglas de uso","Con una herramienta única conectada a nuestros documentos"]],
+ [2,"¿Tienes una cartera de contratos con fechas de vencimiento?",["No hay cartera","Una hoja con lo principal","Un repositorio con fechas y responsables","Un CLM con alertas de renovación y obligaciones"]],
+ [2,"¿Existen playbooks de negociación y flujos de aprobación?",["No","Existen en la cabeza de los socios","Están escritos por tipo de contrato","Escritos, aplicados con apoyo de IA y con aprobación por cuantía"]],
+ [3,"¿Cómo se reparte y se sigue el trabajo?",["Cada quien atiende lo que le llega","Reparto verbal y seguimiento por correo","Lista de tareas con responsable y fecha","Tablero con estados, plazos y carga por persona"]],
+ [3,"¿Le reportas a la dirección con datos?",["No reporto","Cuando me lo piden y a mano","Informe mensual en Excel","Tablero en vivo con tiempos, volumen y riesgo"]],
+ [4,"¿Hay reglas sobre qué información se puede pegar en una herramienta de IA?",["No","Se comentó una vez","Hay una política escrita","Política escrita, con anonimización y capacitación"]],
+ [4,"¿Alguien revisa lo que produce la IA antes de que salga?",["No siempre","Depende de quién","Sí, por costumbre","Sí, por regla escrita, con responsable y registro"]]
+];
+const NX=[
+ "Define un punto de entrada único y cinco campos obligatorios por solicitud. Ese es tu primer tablero.",
+ "Reúne tus veinte documentos más usados, cada uno con responsable y fecha. Es el corpus de tu primer RAG (módulo 2).",
+ "Lista tus contratos vigentes con contraparte, valor, vencimiento y aviso previo. Sin esa tabla no hay CLM que valga.",
+ "Pasa el trabajo a cuatro estados visibles (nuevo, en trabajo, en revisión, hecho), cada tarea con responsable y fecha.",
+ "Escribe una página: qué se puede pegar en una herramienta de IA, qué no y quién revisa. Antes de comprar nada."
+];
+(function(){
+  const root=$("#mad"); let i=0, sc, hist;
+  function start(){i=0;sc=[0,0,0,0,0];hist=[];ask()}
+  function ask(){const q=MQ[i];
+    root.innerHTML=`<div class="prog"><i style="width:${i/MQ.length*100}%"></i></div><span class="qn">Pregunta ${i+1} de ${MQ.length} · ${DIM[q[0]]}</span><div class="dq">${esc(q[1])}</div>`+q[2].map((o,j)=>`<button class="dopt" data-j="${j}">${esc(o)}</button>`).join("")+(i>0?`<p style="margin:14px 0 0"><button class="btn ghost" data-back="1">Atrás</button></p>`:"");}
+  function radar(){
+    const cx=170,cy=165,R=120,n=5, ang=k=>-Math.PI/2+k*2*Math.PI/n, P=(k,r)=>[cx+r*Math.cos(ang(k)),cy+r*Math.sin(ang(k))];
+    let g="";
+    [2,4,6].forEach(v=>{g+=`<polygon points="${DIM.map((_,k)=>P(k,R*v/6).map(x=>x.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="#d4d4d8" stroke-width="1"/>`});
+    DIM.forEach((d,k)=>{const [x,y]=P(k,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#e4e4e7"/>`;
+      const [lx,ly]=P(k,R+22);g+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${Math.abs(lx-cx)<8?'middle':lx>cx?'start':'end'}" font-size="12.5" font-weight="600" fill="#43444c" font-family="Inter,sans-serif">${d}</text>`});
+    g+=`<polygon points="${sc.map((v,k)=>P(k,R*v/6).map(x=>x.toFixed(1)).join(",")).join(" ")}" fill="#00522c33" stroke="#00522c" stroke-width="2.5"/>`;
+    sc.forEach((v,k)=>{const [x,y]=P(k,R*v/6);g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="#00522c"/>`});
+    return `<svg class="radar" viewBox="-70 0 480 330" role="img" aria-label="Radar de madurez en cinco dimensiones">${g}</svg>`;
+  }
+  const lvl=v=>v<=2?"Artesanal":v<=4?"En orden":"Integrado";
+  function done(){
+    const order=[4,0,1,2,3]; // el gobierno de IA va primero en el tiempo
+    const low=[...order].sort((a,b)=>sc[a]-sc[b]||order.indexOf(a)-order.indexOf(b)).slice(0,2);
+    const tot=sc.reduce((a,b)=>a+b,0);
+    root.innerHTML=`<div class="prog"><i style="width:100%"></i></div><span class="tag">Resultado · ${tot} de 30</span><h3 style="margin:8px 0 0;font-size:24px;letter-spacing:-.01em">${tot<=12?"Artesanal: todo depende de las personas":tot<=22?"En orden en algunas áreas, suelto en otras":"Integrado: ya opera como sistema"}</h3>${radar()}<div class="dimr">${DIM.map((d,k)=>`<div><span>${d}</span><span class="b"><i style="width:${sc[k]/6*100}%"></i></span><small>${lvl(sc[k])} (${sc[k]}/6)</small></div>`).join("")}</div><div class="next"><h3 class="sub">Por dónde empezar</h3><ul>${low.map(k=>`<li><b>${DIM[k]}.</b> ${esc(NX[k])}</li>`).join("")}</ul></div><p style="margin:16px 0 0"><button class="btn" data-restart="1">Hacer el diagnóstico otra vez</button></p>`;
+  }
+  root.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.restart)return start();
+    if(b.dataset.back){if(i>0){i--;const p=hist.pop();sc[p.d]-=p.v;ask()}return}
+    if(b.dataset.j===undefined)return;
+    const v=+b.dataset.j, d=MQ[i][0]; sc[d]+=v; hist.push({d,v}); i++; i<MQ.length?ask():done();});
+  start();
+})();
+window.addEventListener("error",e=>{document.title="ERR "+e.message});
+</script>
+</body>
+</html>

@@ -93,6 +93,10 @@ def main():
     rag = (rag.replace("{{INST_BAND}}", inst_band()).replace("{{FONT_CSS}}", font_css())
               .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png")))
     (ROOT / "sesion-rag.html").write_text(asciify(rag), encoding="ascii")
+    m3 = (SRC / "modulo3.html").read_text(encoding="utf-8")
+    m3 = (m3.replace("{{INST_BAND}}", inst_band()).replace("{{FONT_CSS}}", font_css())
+            .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png")))
+    (ROOT / "modulo-3.html").write_text(asciify(m3), encoding="ascii")
     n = len(re.findall(r'^\{a:"', prompts_js(), flags=re.M))
     print(f"ok: {OUT} ({OUT.stat().st_size:,} bytes, {n} prompts)")
 
