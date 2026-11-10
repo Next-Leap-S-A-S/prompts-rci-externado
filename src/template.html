@@ -379,6 +379,7 @@ footer{margin-top:58px;border-top:1px solid var(--line);padding:28px 0 56px;disp
       <button class="navtab" role="tab" data-t="biblioteca" aria-selected="true"><span class="code">/1</span>Biblioteca</button>
       <button class="navtab" role="tab" data-t="laboratorio" aria-selected="false"><span class="code">/2</span>Laboratorio</button>
       <button class="navtab" role="tab" data-t="ejercicio" aria-selected="false"><span class="code">/3</span>Ejercicio</button>
+      <button class="navtab" role="tab" data-t="ia" aria-selected="false"><span class="code">/4</span>Mis prompts con IA</button>
     </div>
     <div class="navright">
       <span class="vdiv"></span>
@@ -533,6 +534,15 @@ footer{margin-top:58px;border-top:1px solid var(--line);padding:28px 0 56px;disp
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="panel" id="p-ia" hidden>
+    <div class="sechead">
+      <p class="eyebrow">/mis prompts con IA &middot; c&oacute;digo de la clase</p>
+      <h2>Genera tu propia biblioteca.</h2>
+      <p>Introduce el c&oacute;digo de la clase, elige tu &aacute;rea, rol y tareas, y la IA arma prompts RCI a tu medida. <a href="https://biblioteca-externado.vercel.app" target="_blank" rel="noopener">Abrir en pantalla completa</a></p>
+    </div>
+    <iframe id="ia-frame" title="Mis prompts con IA" data-src="https://biblioteca-externado.vercel.app" style="width:100%;height:85vh;min-height:620px;border:1px solid var(--line);border-radius:12px;background:#fff" loading="lazy"></iframe>
   </section>
 
   <section class="panel" id="p-ejercicio" hidden>
@@ -895,7 +905,8 @@ el("#timer-btn").addEventListener("click",e=>{
 els(".navtab").forEach(t=>t.addEventListener("click",()=>{
   const k=t.dataset.t;
   els(".navtab").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
-  ["biblioteca","laboratorio","ejercicio"].forEach(n=>el("#p-"+n).hidden=(n!==k));
+  ["biblioteca","laboratorio","ejercicio","ia"].forEach(n=>el("#p-"+n).hidden=(n!==k));
+  if(k==="ia"){const f=el("#ia-frame");if(!f.src)f.src=f.dataset.src;}
   el("#filters").hidden=(k!=="biblioteca");
   if(k==="ejercicio"&&!el("#pool").children.length) montar();
   const y=el(".method").offsetTop+el(".method").offsetHeight-1;
