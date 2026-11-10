@@ -20,18 +20,18 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Inter',syste
 .code{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60);letter-spacing:.02em}
 header.h{padding:56px 0 36px}
 h1{font-size:clamp(30px,6vw,52px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 14px;font-weight:600}
-h1 span{background:linear-gradient(135deg,var(--rol),var(--ctx),var(--ins));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 span{background:linear-gradient(135deg,#00522c,#78b92f);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{color:var(--ink60);max-width:62ch;margin:0;font-size:18px}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));padding-bottom:24px}
 .card{border:1px solid var(--line);background:var(--surf);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:6px}
 .card h2{margin:4px 0 0;font-size:24px;letter-spacing:-.01em;font-weight:600}
 .card p{margin:0 0 12px;color:var(--ink60)}
 .l{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit;text-decoration:none;margin-top:8px}
-.l:hover,.l:focus-visible{border-color:var(--ink);outline:none}
+.l:hover,.l:focus-visible{border-color:var(--g);outline:none}
 .l strong{display:block;font-size:15px;font-weight:600}
 .l small{color:var(--ink60);font-size:13px}
 .l::after{content:"\2192";font-weight:600}
-.l.main{background:var(--ink);color:#fff;border-color:var(--ink)}
+.l.main{background:var(--g);color:#fff;border-color:var(--g)}
 .l.main small{color:#ffffffb8}
 .soon{margin-top:8px;padding:13px 15px;border:1px dashed var(--line);border-radius:10px;color:var(--ink60);font-size:14px}
 .how{padding:28px 0 8px}
@@ -41,10 +41,11 @@ footer{border-top:1px solid var(--line);margin-top:32px;padding:20px 0 40px;colo
 </style>
 </head>
 <body>
+{{INST_BAND}}
 <div class="wrap">
   <div class="top">
     <div class="brand"><img src="{{LOGO_PNG}}" alt=""><span>Next Leap</span></div>
-    <div class="client"><b>Departamento de Propiedad Intelectual</b>Universidad Externado de Colombia</div>
+    <div class="client">Con la <b>Universidad Externado de Colombia</b></div>
   </div>
   <header class="h">
     <span class="code">/curso</span>

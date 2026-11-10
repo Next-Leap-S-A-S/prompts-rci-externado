@@ -35,6 +35,10 @@ def font_css():
                    "src:url(data:font/woff2;base64,%s) format('woff2');}" % (fam, w, b64(SRC / "assets" / fn)))
     return "\n".join(out)
 
+def inst_band():
+    t = (SRC / "inst_band.html").read_text(encoding="utf-8")
+    return t.replace("{{EXT_LOGO}}", "data:image/svg+xml;base64," + b64(SRC / "assets" / "externado.svg"))
+
 def prompts_js():
     parts = []
     for a in AREAS_ORDER:
@@ -72,7 +76,7 @@ def asciify(html):
 
 def main():
     tpl = (RAG / "template.html").read_text(encoding="utf-8")
-    html = (tpl.replace("{{FONT_CSS}}", font_css())
+    html = (tpl.replace("{{INST_BAND}}", inst_band()).replace("{{FONT_CSS}}", font_css())
                .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png"))
                .replace("{{PROMPTS}}", prompts_js())
                .replace("{{RONDAS}}", (RAG / "rondas.js").read_text(encoding="utf-8").strip()))
@@ -84,7 +88,7 @@ def main():
     OUT.write_text(html, encoding="ascii")
     n = len(re.findall(r'^\{a:"', prompts_js(), flags=re.M))
     land = (RAG / "landing.html").read_text(encoding="utf-8")
-    land = (land.replace("{{FONT_CSS}}", font_css())
+    land = (land.replace("{{INST_BAND}}", inst_band()).replace("{{FONT_CSS}}", font_css())
                 .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png")))
     OUT_LANDING.write_text(asciify(land), encoding="ascii")
     print(f"ok: {OUT_LANDING}")
