@@ -72,18 +72,29 @@ section.s>.wrap>h2{font-size:clamp(24px,4vw,34px);letter-spacing:-.015em;margin:
 .scoreline{margin-top:12px;font-weight:600}
 
 /* 2 modelo vs rag */
-.cmp{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
-.cmp th,.cmp td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left}
-.cmp th{font-size:13px}.cmp th:first-child{color:#7c3aed}.cmp th:last-child{color:var(--dat)}
-.cmp tr:last-child td{border-bottom:0}
-.cmp tr.hl td{background:var(--gs)}
-.cmp td:last-child{font-weight:500}
-.pipe{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:6px 0 14px}
-.pipe .st{flex:1 1 130px;border:1.5px solid var(--line2);background:#fff;border-radius:10px;padding:10px 12px;text-align:left;font-size:14px;line-height:1.3;transition:.2s}
-.pipe .st small{display:block;color:var(--ink60);font-size:12px;margin-top:2px}
-.pipe .st.act{border-color:var(--g);background:var(--gs);box-shadow:0 0 0 3px #00522c1a}
-.pipe .st.ret.act{border-color:var(--ret);background:#fff1f3;box-shadow:0 0 0 3px #e11d481a}
-.pipe .st.gen.act{border-color:var(--gen);background:#fffbeb;box-shadow:0 0 0 3px #d977061a}
+.dtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.dwrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}
+.dwrap svg[hidden]{display:none}
+.dwrap svg{display:block;width:100%;min-width:640px;height:auto}
+.dwrap svg text{font-family:'Inter',system-ui,sans-serif}
+.dcap{font-size:14px;color:var(--ink60);margin:8px 2px 0}
+.nd{transition:opacity .25s}
+svg.playing .nd{opacity:.25}
+svg.playing .nd.lit{opacity:1}
+.needs{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.nrow{display:grid;grid-template-columns:1fr 110px 110px;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.nrow:last-of-type{border-bottom:0}
+.nrow.head{cursor:default;background:var(--bg1);font-size:13px;font-weight:600;color:var(--ink60)}
+.nrow label{display:flex;gap:10px;align-items:center;cursor:pointer}
+.nrow input{accent-color:var(--g);width:18px;height:18px;flex:none}
+.nrow.on{background:var(--gs)}
+.mk{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600}
+.mk i{font-style:normal;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:13px;color:#fff}
+.mk.y i{background:var(--ok)}.mk.n i{background:var(--bad)}.mk.h i{background:#d97706}
+.mk.y{color:#166534}.mk.n{color:#991b1b}.mk.h{color:#92400e}
+@media(max-width:560px){.nrow{grid-template-columns:1fr 78px 78px;padding:10px}.mk span{display:none}}
+.nsum{padding:14px 16px;border-top:1px solid var(--line);font-weight:600;background:var(--bg1)}
+.nsum small{display:block;font-weight:400;color:var(--ink60);margin-top:2px}
 .qrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .kctl{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:14px}
 .kctl input{width:160px;accent-color:var(--g)}
@@ -126,9 +137,12 @@ section.s>.wrap>h2{font-size:clamp(24px,4vw,34px);letter-spacing:-.015em;margin:
 .chunk mark{background:#fde68a;padding:0 2px;border-radius:3px}
 .sel2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
 select{font:inherit;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:#fff}
-.fmt{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
-.fmt div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.fmt small{display:block;color:var(--ink60);font-size:12px}.fmt b{font-size:17px}
+.rank{display:grid;gap:8px;margin-top:10px}
+.rk{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.rk .n{font:600 15px 'IBM Plex Mono',monospace;width:36px;height:36px;border-radius:9px;background:var(--bg1);display:grid;place-items:center;border:1px solid var(--line2)}
+.rk.top{border-color:var(--g);background:var(--gs)}.rk.top .n{background:var(--g);color:#fff;border-color:var(--g)}
+.rk b{font-size:17px}.rk span:not(.tag){display:block;color:var(--ink60);font-size:14px}
+.rk i{margin-left:8px}
 
 /* 4 diagnostico */
 .diag{max-width:720px}
@@ -222,19 +236,70 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 <section class="s" id="modelo-vs-rag"><div class="wrap">
   <span class="code">/2</span>
   <h2>Un modelo solo frente a un modelo con RAG</h2>
-  <p class="intro">RAG une dos piezas: un <b style="color:var(--ret)">recuperador</b> que busca en tus documentos y un <b style="color:var(--gen)">generador</b> (el LLM) que redacta la respuesta con lo que el recuperador encontr&#243;.</p>
+  <p class="intro">RAG une dos piezas. Un <b style="color:var(--ret)">recuperador</b> busca en tus documentos y un <b style="color:var(--gen)">generador</b> (el LLM) redacta la respuesta con lo que el recuperador encontr&#243;.</p>
 
-  <table class="cmp" id="cmp"><thead><tr><th>LLM tradicional</th><th>RAG</th></tr></thead><tbody>
-    <tr><td>Entrenamiento masivo</td><td>Consulta externa din&#225;mica</td></tr>
-    <tr><td>Memoria est&#225;tica</td><td>Conocimiento actualizado</td></tr>
-    <tr><td>Sin trazabilidad</td><td>Trazabilidad documental</td></tr>
-    <tr><td>Alucinaciones frecuentes</td><td>Respuestas soportadas en fuentes</td></tr>
-  </tbody></table>
+  <div class="dtabs" id="dtabs" role="tablist">
+    <button class="chip" data-v="llm" aria-pressed="false">Modelo solo</button>
+    <button class="chip" data-v="simple" aria-pressed="false">RAG en cuatro pasos</button>
+    <button class="chip" data-v="full" aria-pressed="true">RAG en detalle</button>
+  </div>
+  <div class="dwrap">
+    <svg id="g-llm" viewBox="0 0 880 210" role="img" aria-label="Diagrama del modelo solo: texto de entrada, LLM, texto de salida" hidden>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5f6069"/></marker></defs>
+      <rect x="30" y="70" width="230" height="74" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/><text x="145" y="113" text-anchor="middle" font-size="18" font-weight="600" fill="#111114">Texto de entrada</text>
+      <rect x="325" y="70" width="230" height="74" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="440" y="103" text-anchor="middle" font-size="20" font-weight="600" fill="#111114">LLM</text><text x="440" y="127" text-anchor="middle" font-size="13" fill="#43444c">lo aprendido en el entrenamiento</text>
+      <rect x="620" y="70" width="230" height="74" rx="12" fill="#f4f4f5" stroke="#85868f" stroke-width="2"/><text x="735" y="113" text-anchor="middle" font-size="18" font-weight="600" fill="#111114">Texto de salida</text>
+      <path d="M262 107H321" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar)"/><path d="M557 107H616" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+    </svg>
+    <svg id="g-simple" viewBox="0 0 880 330" role="img" aria-label="Diagrama de RAG en cuatro pasos" hidden>
+      <rect x="30" y="40" width="270" height="76" rx="6" fill="#2563eb"/><text x="165" y="85" text-anchor="middle" font-size="19" font-weight="600" fill="#fff">Pregunta del usuario</text>
+      <rect x="560" y="26" width="290" height="104" rx="6" fill="#e11d48"/><text x="705" y="72" text-anchor="middle" font-size="19" font-weight="600" fill="#fff">Recuperador sem&#225;ntico</text><text x="705" y="98" text-anchor="middle" font-size="15" fill="#ffe4e6">busca en tus documentos</text>
+      <rect x="560" y="190" width="290" height="104" rx="6" fill="#f59e0b"/><text x="705" y="236" text-anchor="middle" font-size="19" font-weight="600" fill="#111114">Generador LLM</text><text x="705" y="262" text-anchor="middle" font-size="15" fill="#43320a">redacta con lo encontrado</text>
+      <rect x="150" y="204" width="290" height="76" rx="6" fill="#2dd4bf"/><text x="295" y="236" text-anchor="middle" font-size="19" font-weight="600" fill="#111114">Respuesta aumentada</text><text x="295" y="260" text-anchor="middle" font-size="19" font-weight="600" fill="#111114">y precisa</text>
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5f6069"/></marker></defs>
+      <path d="M302 78H556" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar2)"/>
+      <path d="M705 132V186" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar2)"/>
+      <path d="M558 242H444" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar2)"/>
+    </svg>
+    <svg id="g-full" viewBox="0 0 880 370" role="img" aria-label="Diagrama detallado de RAG: pregunta, embedding, vector, b&#250;squeda por similitud, base vectorial, pasajes, prompt, LLM y respuesta">
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5f6069"/></marker></defs>
+      <rect x="22" y="112" width="578" height="244" rx="14" fill="none" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="7 6"/>
+      <text x="330" y="136" font-size="13" font-weight="600" fill="#be123c">Recuperaci&#243;n sem&#225;ntica</text>
+      <g class="nd" data-o="0"><circle cx="62" cy="52" r="30" fill="#2563eb"/><text x="62" y="57" text-anchor="middle" font-size="13" font-weight="600" fill="#fff">Usuario</text>
+        <rect x="130" y="30" width="170" height="44" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/><text x="215" y="58" text-anchor="middle" font-size="15" font-weight="600" fill="#111114">Pregunta</text>
+        <path d="M94 52H126" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+      <g class="nd" data-o="1"><rect x="40" y="152" width="170" height="44" rx="10" fill="#fff1f3" stroke="#e11d48" stroke-width="2"/><text x="125" y="179" text-anchor="middle" font-size="14" fill="#111114">Modelo de embeddings</text>
+        <path d="M215 76V120H125V148" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+      <g class="nd" data-o="2"><rect x="40" y="226" width="170" height="44" rx="10" fill="#fff1f3" stroke="#e11d48" stroke-width="2"/><text x="125" y="253" text-anchor="middle" font-size="15" fill="#111114">Vector</text>
+        <path d="M125 198V222" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+      <g class="nd" data-o="3"><rect x="40" y="300" width="170" height="44" rx="10" fill="#fff1f3" stroke="#e11d48" stroke-width="2"/><text x="125" y="327" text-anchor="middle" font-size="14" fill="#111114">B&#250;squeda por similitud</text>
+        <path d="M125 272V296" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+      <g class="nd" data-o="4"><path d="M270 200c0-14 70-14 70 0v84c0 14-70 14-70 0z" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><ellipse cx="305" cy="200" rx="35" ry="9" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/><path d="M270 228c0 12 70 12 70 0M270 256c0 12 70 12 70 0" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+        <text x="305" y="312" text-anchor="middle" font-size="14" fill="#111114">Base vectorial</text>
+        <path d="M214 322L262 290" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+      <g class="nd" data-o="5"><rect x="450" y="206" width="76" height="86" rx="6" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/><rect x="460" y="220" width="56" height="6" rx="3" fill="#4f46e5"/><rect x="460" y="236" width="56" height="6" rx="3" fill="#818cf8"/><rect x="460" y="252" width="40" height="6" rx="3" fill="#818cf8"/>
+        <text x="488" y="316" text-anchor="middle" font-size="14" fill="#111114">Pasajes similares</text>
+        <path d="M344 246H446" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+      <g class="nd" data-o="6"><rect x="690" y="236" width="170" height="50" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="2"/><text x="775" y="267" text-anchor="middle" font-size="16" font-weight="600" fill="#111114">Prompt</text>
+        <path d="M530 246H686" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/>
+        <text x="645" y="226" text-anchor="middle" font-size="12" fill="#5f6069">pregunta + pasajes</text></g>
+      <g class="nd" data-o="7"><rect x="690" y="140" width="170" height="50" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="2"/><text x="775" y="171" text-anchor="middle" font-size="16" font-weight="600" fill="#111114">LLM</text>
+        <path d="M775 234V194" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+      <g class="nd" data-o="8"><rect x="680" y="44" width="190" height="50" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/><text x="775" y="75" text-anchor="middle" font-size="15" font-weight="600" fill="#111114">Respuesta con fuentes</text>
+        <path d="M775 138V98" stroke="#5f6069" stroke-width="2" fill="none" marker-end="url(#ar3)"/></g>
+    </svg>
+  </div>
+  <p class="dcap" id="dcap"></p>
+
+  <div class="card" style="margin-top:22px">
+    <h3 class="sub">Marca lo que necesitas</h3>
+    <p class="note" style="margin:0 0 10px">Tilda lo que tu trabajo le pedir&#237;a a la IA y mira qui&#233;n lo cubre.</p>
+    <div class="needs" id="needs"></div>
+  </div>
 
   <div class="card" style="margin-top:22px">
     <h3 class="sub">M&#237;ralo funcionar</h3>
     <p class="note" style="margin:0 0 8px">Corpus ficticio de una oficina de propiedad intelectual. Elige una pregunta y mira qu&#233; recupera el sistema.</p>
-    <div class="pipe" id="pipe"></div>
     <div class="qrow" id="qs"></div>
     <div class="kctl"><label for="k">Fragmentos que se recuperan (k)</label><input type="range" id="k" min="1" max="4" value="2"><b id="kv">2</b></div>
     <div class="frags" id="frags"><div class="empty">Elige una pregunta para empezar.</div></div>
@@ -242,7 +307,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       <div class="ans bad" id="ans-llm"><h4><span class="tag bad">Sin RAG</span> responde de memoria</h4><p class="empty">Elige una pregunta.</p></div>
       <div class="ans good" id="ans-rag"><h4><span class="tag ok">Con RAG</span> responde con tus fuentes</h4><p class="empty">Elige una pregunta.</p></div>
     </div>
-    <p class="note" style="margin:10px 0 0">Prueba k = 1 con la segunda pregunta: el fragmento correcto queda de segundo y se pierde. Luego prueba la cuarta. Si el fragmento correcto no se recupera, el generador no puede inventarlo bien. Si no est&#225; en los documentos, un buen RAG lo dice.</p>
+    <p class="note" style="margin:10px 0 0">Prueba k = 1 con la segunda pregunta. El fragmento correcto queda de segundo y se pierde. Luego prueba la cuarta, que no tiene respuesta en ning&#250;n documento. Un buen RAG lo dice en vez de inventar.</p>
   </div>
 </div></section>
 
@@ -286,8 +351,10 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 
   <div class="card" style="margin-top:16px">
     <h3 class="sub">&#191;En qu&#233; formato dejo mis datos?</h3>
-    <div class="sel2"><label for="ft">Tengo</label><select id="ft"></select></div>
-    <div class="fmt" id="fmt"></div>
+    <p class="note" style="margin:0">Es el orden de preferencia para los modelos de IA. Entre m&#225;s arriba, mejor lo leen.</p>
+    <div class="sel2"><label for="ft">Tengo</label><select id="ft"><option value="t">Texto: contratos, manuales, normas</option><option value="b">Una base de datos o tabla</option></select></div>
+    <div class="rank" id="rank"></div>
+    <p class="note" id="rank-tip" style="margin:10px 0 0"></p>
   </div>
 </div></section>
 
@@ -369,7 +436,7 @@ const SEG=[
 })();
 
 const PROBE=[
- {q:"Qu\u00e9 es una marca y para qu\u00e9 sirve (concepto general)",r:"in",t:"S\u00ed lo sabe",d:"Es conocimiento p\u00fablico y muy repetido en textos abiertos. Aun as\u00ed conviene verificar la norma vigente."},
+ {q:"Qu\u00e9 es una marca y para qu\u00e9 sirve (concepto general)",r:"in",t:"S\u00ed lo sabe",d:"Es conocimiento p\u00fablico y muy repetido en textos abiertos. La norma vigente se verifica igual."},
  {q:"El contrato de licencia que firm\u00f3 tu cliente la semana pasada",r:"out",t:"No lo sabe",d:"Es un documento privado y nuevo. El modelo nunca lo vio. Solo lo conocer\u00e1 si se lo das en el prompt o v\u00eda RAG."},
  {q:"Una sentencia publicada hace dos semanas",r:"old",t:"Probablemente no",d:"Pas\u00f3 despu\u00e9s de su fecha de corte. Puede inventar algo que suene parecido, que es peor que no saber."},
  {q:"El manual interno de tu oficina sobre c\u00f3mo se abre un caso",r:"out",t:"No lo sabe",d:"Documento interno. Es el caso t\u00edpico donde RAG aporta valor."},
@@ -409,9 +476,38 @@ const QS=[
   llm:"La regal\u00eda m\u00ednima suele estar entre el 2 % y el 5 % de las ventas.",llmw:"Responde con seguridad algo que nadie le ha dado.",
   rag:"No encuentro esa informaci\u00f3n en los documentos. La pol\u00edtica fija una regal\u00eda m\u00ednima solo para licencias no exclusivas (\u00a75.1).",cite:"F2"}
 ];
-const STAGES=[["Pregunta","entra el usuario"],["Embedding","se vuelve vector"],["B\u00fasqueda","por similitud","ret"],["Fragmentos","los m\u00e1s parecidos","ret"],["Prompt","pregunta + fragmentos","gen"],["LLM","redacta","gen"],["Respuesta","con fuentes"]];
+const CAPS={llm:"Un modelo solo recibe texto y responde con lo que aprendi\u00f3 en el entrenamiento. No consulta nada m\u00e1s.",simple:"Cuatro pasos: el usuario pregunta, el recuperador busca en tus documentos, el generador redacta con lo encontrado y la respuesta sale apoyada en fuentes.",full:"El recorrido completo. La pregunta se convierte en un vector, se compara con los vectores de tus documentos y los pasajes m\u00e1s parecidos se pegan al prompt antes de llegar al LLM."};
+const NEEDS=[
+ ["Responder con base en mis documentos","n","y"],
+ ["Usar informaci\u00f3n posterior a su fecha de corte","n","y"],
+ ["Saber de qu\u00e9 documento sali\u00f3 cada dato","n","y"],
+ ["Que no invente cuando no sabe","n","h"],
+ ["Explicar conceptos generales","y","y"],
+ ["Redactar y reformular texto","y","y"],
+ ["Empezar hoy, sin preparar datos","y","n"],
+ ["Costo y mantenimiento bajos","y","n"]
+];
+const MK={y:["\u2713","S\u00ed"],n:["\u2717","No"],h:["\u25d0","Parcial"]};
 (function(){
-  $("#pipe").innerHTML=STAGES.map((s,i)=>`<div class="st ${s[2]||''}" data-i="${i}">${s[0]}<small>${s[1]}</small></div>`).join("");
+  const mk=c=>`<span class="mk ${c}"><i aria-hidden="true">${MK[c][0]}</i><span>${MK[c][1]}</span></span>`;
+  $("#needs").innerHTML=`<div class="nrow head"><span>Necesidad</span><span>Modelo solo</span><span>Con RAG</span></div>`+NEEDS.map((n,i)=>`<label class="nrow"><span style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-i="${i}">${esc(n[0])}</span>${mk(n[1])}${mk(n[2])}</label>`).join("")+`<div class="nsum" id="nsum">Marca al menos una necesidad.</div>`;
+  $("#needs").addEventListener("change",()=>{
+    const on=$$("#needs input:checked").map(x=>+x.dataset.i);
+    $$("#needs .nrow:not(.head)").forEach((r,i)=>r.classList.toggle("on",on.includes(i)));
+    if(!on.length){$("#nsum").textContent="Marca al menos una necesidad.";return}
+    const sc=k=>on.reduce((t,i)=>t+({y:1,h:.5,n:0})[NEEDS[i][k]],0), a=sc(1), b=sc(2), f=x=>String(x).replace(".",",");
+    const msg=b>a?"RAG cubre m\u00e1s de lo que pediste.":b<a?"Para esto, un modelo solo alcanza y es m\u00e1s barato.":"Empatan. Elige el m\u00e1s simple.";
+    $("#nsum").innerHTML=`Marcaste ${on.length}. Modelo solo cubre ${f(a)}. RAG cubre ${f(b)}.<small>${msg}</small>`;
+  });
+  const tabs=$("#dtabs");
+  function view(v){
+    ["llm","simple","full"].forEach(k=>$("#g-"+k).hidden=(k!==v));
+    $$("#dtabs .chip").forEach(c=>c.setAttribute("aria-pressed",String(c.dataset.v===v)));
+    $("#dcap").textContent=CAPS[v];
+  }
+  tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)view(b.dataset.v)}); view("full");
+})();
+(function(){
   $("#qs").innerHTML=QS.map((q,i)=>`<button class="chip" data-i="${i}" aria-pressed="false">${esc(q.q)}</button>`).join("");
   let cur=-1, anim=0;
   function render(){
@@ -426,12 +522,12 @@ const STAGES=[["Pregunta","entra el usuario"],["Embedding","se vuelve vector"],[
     $("#ans-rag").innerHTML=`<h4><span class="tag ok">Con RAG</span> responde con tus fuentes</h4><p>${esc(txt)}</p>${c}`;
   }
   function play(){
-    const my=++anim; const sts=$$("#pipe .st"); sts.forEach(s=>s.classList.remove("act"));
-    sts.forEach((s,i)=>setTimeout(()=>{if(my===anim)s.classList.add("act")},i*260));
+    const my=++anim, g=$("#g-full"); $$("#dtabs .chip").forEach(c=>c.getAttribute("aria-pressed")==="false"&&c.dataset.v==="full"&&c.click());
+    const sts=$$("#g-full .nd"); sts.forEach(x=>x.classList.remove("lit")); g.classList.add("playing");
+    sts.forEach((x,i)=>setTimeout(()=>{if(my===anim){x.classList.add("lit");if(i===sts.length-1)setTimeout(()=>{if(my===anim)g.classList.remove("playing")},700)}},i*320));
   }
   $("#qs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cur=+b.dataset.i;$$("#qs .chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));render();play()});
   $("#k").addEventListener("input",render);
-  $("#cmp tbody").addEventListener("mouseover",e=>{const r=e.target.closest("tr");$$("#cmp tr").forEach(x=>x.classList.toggle("hl",x===r))});
 })();
 
 /* ---- 3. datos ---- */
@@ -442,7 +538,7 @@ const STAGES=[["Pregunta","entra el usuario"],["Embedding","se vuelve vector"],[
     $$("#dsteps .chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
     ST.forEach(s=>$("#"+s[0]).hidden=(s[0]!==b.dataset.t)); if(b.dataset.t==="d3")chunk();});
 
-  const CR=[["Relevancia tem\u00e1tica","Si es un RAG jur\u00eddico: jurisprudencia, normas, manuales legales."],["Confiabilidad","Fuentes oficiales, actualizadas y verificadas: altas cortes, ministerios, manuales internos validados."],["Granularidad \u00fatil","Documentos con detalle pr\u00e1ctico, no art\u00edculos de prensa."],["Formato accesible","Texto digitalizable, no solo im\u00e1genes. Si es escaneado, hay que pasar OCR."]];
+  const CR=[["Relevancia tem\u00e1tica","Si es un RAG jur\u00eddico: jurisprudencia, normas, manuales legales."],["Confiabilidad","Fuentes oficiales, actualizadas y verificadas: altas cortes, ministerios, manuales internos validados."],["Granularidad \u00fatil","Documentos con detalle pr\u00e1ctico, no art\u00edculos de prensa."],["Formato accesible","Texto digital. Si es una imagen escaneada, hay que pasar OCR primero."]];
   $("#crit").innerHTML=CR.map((c,i)=>`<label><input type="checkbox" data-i="${i}"><div><b>${c[0]}</b><span>${c[1]}</span></div></label>`).join("");
   $("#crit").addEventListener("change",e=>{
     $$("#crit label").forEach(l=>l.classList.toggle("on",l.querySelector("input").checked));
@@ -452,7 +548,7 @@ const STAGES=[["Pregunta","entra el usuario"],["Embedding","se vuelve vector"],[
   });
   $("#crit-score").textContent="Tu corpus cumple 0 de 4.";
 
-  const RAW=`P\u00e1gina 3 de 12\nRECLAMO DE COBRO - El se\u00f1or P\u00e9rez present\u00f3 una QUEJA el 4/3/2024.\n\nCon base en la petici\u00f3n radicada, la entidad respondi\u00f3 dentro del t\u00e9rmino.\n\nCordialmente,\nDirectora Jur\u00eddica\nFirma: ____________\nP\u00e1gina 4 de 12\nEl peticionario  insisti\u00f3 en su RECLAMO ante la entidad.`;
+  const RAW=`P\u00e1gina 3 de 12\nRECLAMO DE COBRO: El se\u00f1or P\u00e9rez present\u00f3 una QUEJA el 4/3/2024.\n\nCon base en la petici\u00f3n radicada, la entidad respondi\u00f3 dentro del t\u00e9rmino.\n\nCordialmente,\nDirectora Jur\u00eddica\nFirma: ____________\nP\u00e1gina 4 de 12\nEl peticionario  insisti\u00f3 en su RECLAMO ante la entidad.`;
   $("#raw").textContent=RAW;
   function clean(){
     const on=k=>$(`#clean-opts [data-c=${k}]`).checked; let t=RAW;
@@ -482,9 +578,11 @@ const STAGES=[["Pregunta","entra el usuario"],["Embedding","se vuelve vector"],[
   }
   $("#cs").addEventListener("input",chunk); $("#chunk-mode").addEventListener("change",chunk); chunk();
 
-  const FM=[["Bases de datos estructuradas",".csv",".xlsx, .json","F\u00e1cil lectura e indexaci\u00f3n"],["Documentos legales o manuales",".pdf \u2192 .txt",".docx","Cuidado con el OCR"],["Texto plano",".txt",".md","Mantener limpio"],["Datos jer\u00e1rquicos o de una API",".json",".yaml","Preserva la estructura"],["Tablas grandes",".parquet",".csv","Escalable y comprimido"]];
-  $("#ft").innerHTML=FM.map((f,i)=>`<option value="${i}">${esc(f[0])}</option>`).join("");
-  function fm(){const f=FM[+$("#ft").value];$("#fmt").innerHTML=`<div><small>Formato ideal</small><b>${esc(f[1])}</b></div><div><small>Alternativas</small><b>${esc(f[2])}</b></div><div><small>Notas</small><b style="font-size:15px">${esc(f[3])}</b></div>`}
+  const FM={
+   t:[[".md","Conserva t\u00edtulos y listas sin ruido. Es el que mejor leen los modelos."],[".txt","Texto limpio y liviano. Pierde la estructura de t\u00edtulos."],[".pdf","Hay que extraer el texto, y si est\u00e1 escaneado, pasar OCR antes."],[".docx / .doc","Formato propietario. Conviene convertirlo antes de indexar."]],
+   b:[[".json","Conserva jerarqu\u00edas y nombres de campos."],[".csv","Tabla plana, liviana y f\u00e1cil de leer."],[".xlsm","Hojas con macros. Exporta a .csv antes de indexar."]]};
+  const TIP={t:"Si tu archivo est\u00e1 abajo en la lista, convi\u00e9rtelo a .md o .txt antes de fragmentar.",b:"Si tu tabla viene de Excel, exp\u00f3rtala a .csv o .json antes de indexar."};
+  function fm(){const k=$("#ft").value;$("#rank").innerHTML=FM[k].map((f,i)=>`<div class="rk ${i===0?'top':''}"><div class="n">${i+1}</div><div><b>${esc(f[0])}</b>${i===0?' <span class="tag ok">el mejor</span>':''}<span>${esc(f[1])}</span></div></div>`).join("");$("#rank-tip").textContent=TIP[k]}
   $("#ft").addEventListener("change",fm); fm();
 })();
 
