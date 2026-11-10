@@ -1,4 +1,8 @@
-# Prompts RCI · Clase de IA para abogados
+# Curso de inmersión en Inteligencia Artificial
+
+Página de entrada (`index.html`) con las dos sesiones: **Sesión RCI** (`sesion-rci.html`) y **Sesión RAG** (`sesion-rag.html` y `sesion-rag-biblioteca.html`). Se generan con `python3 src/build.py` (hub y RCI) y `python3 src/build_rag.py` (RAG, fuentes en `src/rag/`). Lo que sigue describe la Sesión RCI.
+
+## Sesión RCI
 
 Herramienta de apoyo para una clase de inteligencia artificial dirigida a
 abogados en la Universidad Externado de Colombia. Enseña a escribir prompts con la

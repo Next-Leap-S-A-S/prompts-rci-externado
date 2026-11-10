@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curso de inmersión en Inteligencia Artificial | Next Leap</title>
+<meta name="description" content="Sesiones, prompts y herramientas del Curso de inmersión en Inteligencia Artificial para abogados.">
+<style>
+{{FONT_CSS}}
+:root{--bg:#fff;--ink:#111114;--ink60:#5f6069;--line:rgba(0,0,0,.09);--surf:rgba(0,0,0,.022);--g:#00522c;--rol:#2563eb;--ctx:#9333ea;--ins:#db2777}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Inter',system-ui,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600}
+.brand img{width:27px;height:26px}
+.client{font-size:13px;color:var(--ink60);text-align:right;line-height:1.3}
+.client b{display:block;color:var(--ink);font-weight:600}
+.code{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60);letter-spacing:.02em}
+header.h{padding:56px 0 36px}
+h1{font-size:clamp(30px,6vw,52px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 14px;font-weight:600}
+h1 span{background:linear-gradient(135deg,var(--rol),var(--ctx),var(--ins));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink60);max-width:62ch;margin:0;font-size:18px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));padding-bottom:24px}
+.card{border:1px solid var(--line);background:var(--surf);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:6px}
+.card h2{margin:4px 0 0;font-size:24px;letter-spacing:-.01em;font-weight:600}
+.card p{margin:0 0 12px;color:var(--ink60)}
+.l{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit;text-decoration:none;margin-top:8px}
+.l:hover,.l:focus-visible{border-color:var(--ink);outline:none}
+.l strong{display:block;font-size:15px;font-weight:600}
+.l small{color:var(--ink60);font-size:13px}
+.l::after{content:"\2192";font-weight:600}
+.l.main{background:var(--ink);color:#fff;border-color:var(--ink)}
+.l.main small{color:#ffffffb8}
+.soon{margin-top:8px;padding:13px 15px;border:1px dashed var(--line);border-radius:10px;color:var(--ink60);font-size:14px}
+.how{padding:28px 0 8px}
+.how h3{font-size:15px;margin:0 0 6px;font-weight:600}
+.how p{margin:0;color:var(--ink60);max-width:70ch;font-size:15px}
+footer{border-top:1px solid var(--line);margin-top:32px;padding:20px 0 40px;color:var(--ink60);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><img src="{{LOGO_PNG}}" alt=""><span>Next Leap</span></div>
+    <div class="client"><b>Departamento de Propiedad Intelectual</b>Universidad Externado de Colombia</div>
+  </div>
+  <header class="h">
+    <span class="code">/curso</span>
+    <h1>Curso de inmersión en <span>Inteligencia Artificial</span></h1>
+    <p class="lead">Todas las sesiones, prompts y herramientas en un solo lugar. Elige la sesión del día.</p>
+  </header>
+  <div class="grid">
+    <section class="card">
+      <span class="code">/sesión 1</span>
+      <h2>Sesión RCI</h2>
+      <p>Cómo pedirle bien las cosas a la IA con el método Rol, Contexto, Instrucción, aplicado al ejercicio jurídico.</p>
+      <a class="l main" href="sesion-rci.html"><div><strong>Abrir la Sesión RCI</strong><small>48 prompts, laboratorio y ejercicio</small></div></a>
+      <a class="l" href="https://biblioteca-externado.vercel.app"><div><strong>Mi biblioteca de prompts</strong><small>La IA genera tu biblioteca según tu perfil</small></div></a>
+    </section>
+    <section class="card">
+      <span class="code">/sesión 2</span>
+      <h2>Sesión RAG</h2>
+      <p>Cómo lograr que la IA responda con base en tus documentos y no de memoria: qué preparar, qué decidir y qué riesgos cuidar.</p>
+      <a class="l main" href="sesion-rag.html"><div><strong>Abrir la Sesión RAG</strong><small>Guía de la sesión</small></div></a>
+      <a class="l" href="sesion-rag-biblioteca.html"><div><strong>Prompts RAG</strong><small>30 prompts, laboratorio y ejercicio</small></div></a>
+    </section>
+  </div>
+  <div class="how">
+    <h3>Antes de pegar nada en una herramienta de IA</h3>
+    <p>Reemplaza nombres, cédulas, NIT, radicados y datos de contacto por marcadores genéricos. La respuesta de la IA es un borrador: verifica cada norma y cada providencia en la fuente oficial.</p>
+  </div>
+  <footer>Next Leap S.A.S. · Curso de inmersión en Inteligencia Artificial</footer>
+</div>
+</body>
+</html>

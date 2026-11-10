@@ -15,7 +15,7 @@ import base64, pathlib, re, sys
 
 SRC = pathlib.Path(__file__).resolve().parent
 ROOT = SRC.parent
-OUT = ROOT / "index.html"
+OUT = ROOT / "sesion-rci.html"
 
 AREAS_ORDER = ["civil", "comercial", "laboral", "penal", "administrativo", "constitucional"]
 
@@ -81,6 +81,10 @@ def main():
     html = asciify(html)
     assert all(ord(c) < 128 for c in html), "quedaron caracteres no ASCII"
     OUT.write_text(html, encoding="ascii")
+    hub = (SRC / "hub.html").read_text(encoding="utf-8")
+    hub = (hub.replace("{{FONT_CSS}}", font_css())
+              .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png")))
+    (ROOT / "index.html").write_text(asciify(hub), encoding="ascii")
     n = len(re.findall(r'^\{a:"', prompts_js(), flags=re.M))
     print(f"ok: {OUT} ({OUT.stat().st_size:,} bytes, {n} prompts)")
 

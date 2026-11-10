@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sesión RAG | Curso de inmersión en Inteligencia Artificial</title>
+<meta name="description" content="Qué es RAG, cómo se prepara y qué decide la dirección. Sesión 2 del Curso de inmersión en Inteligencia Artificial.">
+<style>
+{{FONT_CSS}}
+:root{
+  --bg:#ffffff;--bg1:#f6f6f4;--ink:#111114;--ink75:#43444c;--ink60:#5f6069;--line:rgba(0,0,0,.1);
+  --blue:#2563eb;--purple:#9333ea;--pink:#db2777;--dark:#12141c;--dark2:#1d2030;--onDark:#c9cbd6;
+  --grad:linear-gradient(135deg,#2563eb,#9333ea,#db2777);
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme=light]){--bg:#0f1117;--bg1:#161923;--ink:#f1f1ee;--ink75:#c4c6d0;--ink60:#a0a3b0;--line:rgba(255,255,255,.12);--dark:#07080c;--dark2:#12141c}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+a{color:inherit}
+.code{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin:0 0 14px}
+h1,h2,h3{margin:0;line-height:1.1;letter-spacing:-.02em}
+h2{font-size:clamp(30px,5vw,48px);font-weight:700;margin-bottom:18px}
+h3{font-size:21px;font-weight:600;letter-spacing:-.01em}
+p{margin:0 0 14px}
+.lead{font-size:clamp(18px,2.4vw,22px);color:var(--ink75);max-width:720px}
+section{padding:72px 0}
+.alt{background:var(--bg1)}
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;text-decoration:none}
+.brand img{width:27px;height:26px;display:block}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:600;font-size:15px;padding:11px 20px;border-radius:999px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.hero{padding:96px 0 80px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;right:-180px;top:-200px;width:620px;height:620px;border-radius:50%;background:var(--grad);opacity:.14;filter:blur(30px)}
+.hero h1{font-size:clamp(40px,8vw,84px);font-weight:700;max-width:900px;margin-bottom:24px}
+.hero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:26px}
+.alt .card{background:var(--bg)}
+.card .n{font-family:var(--mono);font-size:14px;color:var(--blue);margin-bottom:10px}
+.card p{color:var(--ink60);margin:8px 0 0;font-size:16px}
+.band{background:var(--dark);color:#f5f4ef;text-align:left}
+.band .eyebrow{color:#9db6ff}
+.band h2{font-size:clamp(34px,6vw,72px);max-width:900px}
+.band p{color:var(--onDark);font-size:clamp(18px,2.4vw,24px);max-width:640px}
+.flow{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));counter-reset:f}
+.flow li{list-style:none;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:20px}
+.flow li b{display:block;font-size:18px;margin-bottom:6px}
+.flow li span{color:var(--ink60);font-size:15px}
+.flow li:before{counter-increment:f;content:counter(f);font-family:var(--mono);color:var(--blue);font-size:14px;display:block;margin-bottom:8px}
+.flow li.last{background:var(--dark);color:#f5f4ef;border-color:var(--dark)}
+.flow li.last span{color:var(--onDark)}
+.flow li.last:before{color:#9db6ff}
+.flow{padding:0;margin:28px 0 0}
+.tablewrap{overflow-x:auto;margin-top:24px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:17px}
+th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink60)}
+td:first-child{font-weight:600}
+td.rag{color:var(--blue);font-weight:500}
+.quote{border-left:5px solid var(--pink);padding:6px 0 6px 22px;font-size:clamp(20px,3vw,28px);font-weight:600;letter-spacing:-.01em;margin:28px 0 0;max-width:780px}
+.steps{display:grid;gap:0;margin-top:28px;border-top:1px solid var(--line)}
+.step{display:grid;grid-template-columns:56px 1fr;gap:4px 16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.step .code{color:var(--blue);padding-top:5px}
+.step p{grid-column:2;color:var(--ink60);margin:0}
+.pill{display:inline-block;font-family:var(--mono);font-size:14px;background:rgba(37,99,235,.1);color:var(--blue);padding:5px 14px;border-radius:999px;margin:4px 6px 0 0}
+.big{font-size:clamp(64px,12vw,120px);font-weight:700;line-height:1;letter-spacing:-.04em;color:var(--blue)}
+.split{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center}
+.tl{border-top:6px solid var(--blue)}
+.tl.end{border-top-color:var(--pink)}
+.tl .code{color:var(--ink60);margin-bottom:8px;display:block}
+
+.navlinks{display:flex;gap:18px;font-size:14px;color:var(--ink60)}
+.navlinks a{text-decoration:none}.navlinks a:hover{color:var(--ink)}
+@media(max-width:900px){.navlinks{display:none}}
+.uc h3{margin-bottom:10px}
+.uc dl{margin:0;font-size:15px;color:var(--ink60)}
+.uc dt{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-top:12px}
+.uc dd{margin:2px 0 0;color:var(--ink75)}
+.yn li{margin-bottom:8px;color:var(--ink75)}
+.yn ul{padding-left:20px;margin:12px 0 0}
+.yes{border-top:6px solid #16a34a}.no{border-top:6px solid var(--pink)}
+.gl{display:grid;gap:0 32px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:24px}
+.gl div{padding:14px 0;border-bottom:1px solid var(--line)}
+.gl b{display:block;font-size:16px}.gl span{color:var(--ink60);font-size:15px}
+details{border-bottom:1px solid var(--line);padding:18px 0}
+details summary{cursor:pointer;font-weight:600;font-size:18px;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary:after{content:"+";float:right;font-family:var(--mono);color:var(--blue)}
+details[open] summary:after{content:"\2212"}
+details p{margin:12px 0 0;color:var(--ink75);max-width:760px}
+.mini{font-size:14px;color:var(--ink60)}
+footer{padding:48px 0;border-top:1px solid var(--line);color:var(--ink60);font-size:15px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+@media(max-width:640px){section{padding:52px 0}.hero{padding:64px 0 56px}nav .btn{padding:9px 14px;font-size:14px}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="index.html" title="Volver al curso"><img src="{{LOGO_PNG}}" alt=""><span>Next Leap</span></a>
+  <div class="navlinks"><a href="#ruta">Ruta</a><a href="#casos">Casos de uso</a><a href="#medir">Medir</a><a href="#equipo">Equipo</a><a href="#faq">Preguntas</a></div>
+  <a class="btn" href="sesion-rag-biblioteca.html">Biblioteca de prompts</a>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <p class="eyebrow">Curso de inmersión en Inteligencia Artificial · Sesión 2</p>
+  <h1>Un RAG no es un chatbot con memoria. <span>Es una biblioteca con bibliotecario.</span></h1>
+  <p class="lead">Cómo hacer que la IA responda con los documentos de tu empresa y con la fuente a la vista. Qué es, cómo se prepara y qué decide la dirección.</p>
+  <div class="cta"><a class="btn" href="#que-es">Empezar</a><a class="btn ghost" href="sesion-rag-biblioteca.html">Ir a los 30 prompts</a></div>
+</div></header>
+
+<section id="limites"><div class="wrap">
+  <p class="eyebrow">El punto de partida</p>
+  <h2>Un modelo de lenguaje solo tiene cuatro límites</h2>
+  <div class="grid g4">
+    <div class="card"><div class="n">01</div><h3>Memoria estática</h3><p>Aprendió hasta una fecha de corte. Lo que pasó después no existe para él.</p></div>
+    <div class="card"><div class="n">02</div><h3>Sin trazabilidad</h3><p>Responde, pero no dice de qué documento sale cada afirmación.</p></div>
+    <div class="card"><div class="n">03</div><h3>Alucinaciones</h3><p>Cuando no sabe, completa con lo que suena plausible. Y lo dice con seguridad.</p></div>
+    <div class="card"><div class="n">04</div><h3>No conoce tu empresa</h3><p>Tus políticas, contratos y procedimientos nunca estuvieron en su entrenamiento.</p></div>
+  </div>
+</div></section>
+
+<section class="band" id="idea"><div class="wrap">
+  <p class="eyebrow">La idea en una imagen</p>
+  <h2>El modelo es un bibliotecario muy culto que nunca ha leído tus documentos.</h2>
+  <p>RAG le abre tu estantería y le exige una cosa: antes de responder, trae el libro y cita la página.</p>
+</div></section>
+
+<section class="alt" id="que-es"><div class="wrap">
+  <p class="eyebrow">Qué es RAG</p>
+  <h2>Retrieval-Augmented Generation</h2>
+  <p class="lead">Una arquitectura que une un buscador de información con un modelo que redacta, para responder con conocimiento actualizado o propio de tu empresa, que el modelo no trae de fábrica.</p>
+  <ol class="flow">
+    <li><b>Pregunta</b><span>Alguien del equipo escribe qué necesita saber.</span></li>
+    <li><b>Recuperador</b><span>Busca en el índice los pasajes más cercanos al tema.</span></li>
+    <li><b>Fragmentos</b><span>Los pasajes se pegan junto a la pregunta.</span></li>
+    <li><b>Generador</b><span>El modelo redacta usando solo ese material.</span></li>
+    <li class="last"><b>Respuesta</b><span>Texto con la fuente citada, listo para verificar.</span></li>
+  </ol>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>Modelo tradicional</th><th>RAG</th></tr>
+    <tr><td>Conocimiento</td><td>Entrenamiento masivo, memoria estática</td><td class="rag">Consulta externa dinámica</td></tr>
+    <tr><td>Vigencia</td><td>Hasta su fecha de corte</td><td class="rag">Tan actual como tus documentos</td></tr>
+    <tr><td>Fuentes</td><td>No las muestra</td><td class="rag">Trazabilidad documental</td></tr>
+    <tr><td>Errores</td><td>Alucinaciones frecuentes</td><td class="rag">Respuestas soportadas en fuentes</td></tr>
+  </table></div>
+  <p class="quote">RAG reduce el error, no lo elimina. Por eso cada respuesta cita su documento.</p>
+</div></section>
+
+<section id="piezas"><div class="wrap">
+  <p class="eyebrow">Las dos piezas</p>
+  <h2>Uno busca y el otro redacta</h2>
+  <div class="grid g2">
+    <div class="card tl"><span class="code">Retriever</span><h3>El recuperador</h3><p>Busca y selecciona los documentos relevantes para la pregunta. Puede usar búsqueda clásica por palabras o búsqueda semántica con vectores, sobre una base indexada de PDF, normas y manuales.</p></div>
+    <div class="card tl end"><span class="code">Generator</span><h3>El generador</h3><p>Es el modelo de lenguaje que redacta la respuesta final. Recibe la pregunta junto con los fragmentos recuperados y los usa como contexto externo.</p></div>
+  </div>
+  <p style="margin-top:22px;color:var(--ink60)">Cuando una respuesta sale mal, pregunta cuál de las dos piezas falló. Si trajo el fragmento equivocado, falló el recuperador o el corpus. Si el fragmento era bueno y la respuesta no, falló el generador.</p>
+</div></section>
+
+<section class="alt" id="ruta"><div class="wrap">
+  <p class="eyebrow">Ruta completa</p>
+  <h2>De la idea a un RAG en operación, en ocho pasos</h2>
+  <p class="lead">Cada paso tiene un responsable y un resultado que se puede ver. Si un paso no tiene ninguno de los dos, todavía no está listo.</p>
+  <div class="steps">
+    <div class="step"><span class="code">01</span><h3>Definir el problema</h3><p><b>Resultado:</b> una frase con el caso de uso y una lista de las preguntas reales que el sistema debe contestar. <b>Responsable:</b> el dueño del proceso de negocio.</p></div>
+    <div class="step"><span class="code">02</span><h3>Elegir el corpus</h3><p><b>Resultado:</b> inventario de documentos con una puntuación de relevancia, confiabilidad, granularidad y formato, y una decisión de entra o no entra. <b>Responsable:</b> el dueño de los documentos.</p></div>
+    <div class="step"><span class="code">03</span><h3>Revisar permisos y datos sensibles</h3><p><b>Resultado:</b> clasificación de cada fuente y lista de lo que no puede entrar al índice. Se hace antes de indexar, no después. <b>Responsable:</b> seguridad de la información y jurídica.</p></div>
+    <div class="step"><span class="code">04</span><h3>Preparar y fragmentar</h3><p><b>Resultado:</b> texto limpio, vocabulario unificado, fragmentos de 300 a 500 palabras y metadatos completos. <b>Responsable:</b> el equipo de datos o de tecnología.</p></div>
+    <div class="step"><span class="code">05</span><h3>Indexar</h3><p><b>Resultado:</b> un índice vectorial que responde a búsquedas de prueba con los fragmentos esperados. <b>Responsable:</b> tecnología o el proveedor.</p></div>
+    <div class="step"><span class="code">06</span><h3>Conectar el generador</h3><p><b>Resultado:</b> instrucciones al modelo que le exigen responder solo con los fragmentos, citar la fuente y decir «no encontré» cuando no hay respaldo. <b>Responsable:</b> tecnología, con revisión del dueño del proceso.</p></div>
+    <div class="step"><span class="code">07</span><h3>Evaluar con preguntas de prueba</h3><p><b>Resultado:</b> una tabla con cada pregunta, la respuesta del sistema, la fuente citada y si el dueño del proceso la acepta. Se repite después de cada cambio. <b>Responsable:</b> el dueño del proceso.</p></div>
+    <div class="step"><span class="code">08</span><h3>Operar y mantener</h3><p><b>Resultado:</b> un calendario de actualización del corpus, un canal para reportar respuestas malas y un reporte mensual a la gerencia. <b>Responsable:</b> el dueño de los documentos y un responsable técnico.</p></div>
+  </div>
+</div></section>
+
+<section id="datos"><div class="wrap">
+  <p class="eyebrow">Preparar los datos</p>
+  <h2>El detalle de preparar los datos</h2>
+  <div class="steps">
+    <div class="step"><span class="code">01</span><h3>Elegir el corpus</h3><p>Responde qué problema resuelve y qué preguntas debe contestar. Luego elige documentos con relevancia, confiabilidad, granularidad útil y formato accesible. Si el corpus no tiene sentido, el RAG responde mal aunque la técnica sea correcta.</p></div>
+    <div class="step"><span class="code">02</span><h3>Procesar</h3><p>Normalizar idioma y formato, quitar ruido (firmas, numeración, notas) y unificar vocabulario: queja, reclamo, petición y solicitud. Alguien tiene que decidir si son lo mismo.</p></div>
+    <div class="step"><span class="code">03</span><h3>Fragmentar</h3><p>Partir los documentos largos en piezas de 300 a 500 palabras, cada una con sus metadatos.<br><span class="pill">título</span><span class="pill">autor</span><span class="pill">fecha</span><span class="pill">tipo de documento</span></p></div>
+    <div class="step"><span class="code">04</span><h3>Unificar formatos</h3><p>Tablas en .csv, documentos en .pdf pasados a .txt, datos jerárquicos en .json, tablas grandes en .parquet. Los PDF escaneados necesitan OCR: sin él, el sistema no lee nada.</p></div>
+    <div class="step"><span class="code">05</span><h3>Indexar</h3><p>Cada fragmento se convierte en un embedding y se guarda en un índice vectorial: la biblioteca semántica. Encuentra textos parecidos aunque no compartan palabras. Opciones: FAISS (local), Chroma (simple), Pinecone, Weaviate o Milvus (nube).</p></div>
+  </div>
+</div></section>
+
+<section class="alt" id="casos"><div class="wrap">
+  <p class="eyebrow">Para qué casos de uso</p>
+  <h2>Donde un RAG da más valor</h2>
+  <p class="lead">El patrón es siempre el mismo: mucha información escrita, preguntas repetidas y un costo real cuando alguien responde mal. Estos son ejemplos de dónde buscar.</p>
+  <div class="grid g3 uc" style="margin-top:28px">
+    <div class="card"><h3>Atención al cliente</h3><dl><dt>Pregunta típica</dt><dd>¿Qué cubre el producto X y cuál es el plazo de respuesta?</dd><dt>Corpus</dt><dd>Manuales de producto, condiciones, preguntas frecuentes, respuestas aprobadas.</dd><dt>Cuidado</dt><dd>Respuestas al cliente con fuente citada y revisión humana al inicio.</dd></dl></div>
+    <div class="card"><h3>Jurídico y cumplimiento</h3><dl><dt>Pregunta típica</dt><dd>¿Qué dice la norma interna o el contrato sobre este caso?</dd><dt>Corpus</dt><dd>Normas, jurisprudencia, contratos, políticas, conceptos anteriores.</dd><dt>Cuidado</dt><dd>Vigencia de cada fuente. Un abogado valida antes de actuar.</dd></dl></div>
+    <div class="card"><h3>Recursos humanos</h3><dl><dt>Pregunta típica</dt><dd>¿Cuántos días de permiso tengo y a quién se los pido?</dd><dt>Corpus</dt><dd>Reglamento interno, políticas de beneficios, procedimientos de ingreso.</dd><dt>Cuidado</dt><dd>Separar documentos generales de datos personales de cada empleado.</dd></dl></div>
+    <div class="card"><h3>Comercial y propuestas</h3><dl><dt>Pregunta típica</dt><dd>¿Qué casos similares hemos entregado y con qué condiciones?</dd><dt>Corpus</dt><dd>Propuestas anteriores, fichas de producto, casos de éxito, listas de precios vigentes.</dd><dt>Cuidado</dt><dd>Precios y condiciones desactualizados. Una fecha de vigencia por documento.</dd></dl></div>
+    <div class="card"><h3>Operaciones y calidad</h3><dl><dt>Pregunta típica</dt><dd>¿Cuál es el procedimiento cuando falla esta etapa?</dd><dt>Corpus</dt><dd>Procedimientos, instructivos, manuales de equipos, registros de incidentes.</dd><dt>Cuidado</dt><dd>Versiones: el sistema debe citar la vigente, no la anterior.</dd></dl></div>
+    <div class="card"><h3>Finanzas y auditoría</h3><dl><dt>Pregunta típica</dt><dd>¿Qué política aplica a este gasto y quién lo aprueba?</dd><dt>Corpus</dt><dd>Políticas financieras, manuales de aprobación, hallazgos de auditorías anteriores.</dd><dt>Cuidado</dt><dd>Cifras: el RAG cita el documento, no reemplaza el cálculo en la hoja o el sistema contable.</dd></dl></div>
+    <div class="card"><h3>Soporte de tecnología</h3><dl><dt>Pregunta típica</dt><dd>¿Cómo se resuelve este error en el sistema Y?</dd><dt>Corpus</dt><dd>Base de conocimiento, tickets resueltos, documentación técnica.</dd><dt>Cuidado</dt><dd>Tickets con datos personales o credenciales: limpiar antes de indexar.</dd></dl></div>
+    <div class="card"><h3>Onboarding y formación</h3><dl><dt>Pregunta típica</dt><dd>Soy nuevo en el área. ¿Por dónde empiezo y qué debo leer?</dd><dt>Corpus</dt><dd>Guías de ingreso, organigrama, procesos, material de capacitación.</dd><dt>Cuidado</dt><dd>Es un buen primer piloto: riesgo bajo, preguntas repetidas y usuarios que perdonan.</dd></dl></div>
+    <div class="card"><h3>Dirección y junta</h3><dl><dt>Pregunta típica</dt><dd>¿Qué decidimos sobre este tema en las actas del último año?</dd><dt>Corpus</dt><dd>Actas, informes de gestión, presentaciones a la junta, planes estratégicos.</dd><dt>Cuidado</dt><dd>Acceso restringido por rol. Es información de alta sensibilidad.</dd></dl></div>
+  </div>
+  <p class="quote">Empieza por el caso donde haya muchas preguntas repetidas, un corpus ordenado y poco riesgo si la respuesta falla.</p>
+</div></section>
+
+<section id="cuando"><div class="wrap">
+  <p class="eyebrow">Cuándo sí y cuándo no</p>
+  <h2>RAG no es la respuesta a todo</h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card yes yn"><h3>Sí conviene cuando</h3><ul>
+      <li>La respuesta está escrita en documentos de la empresa.</li>
+      <li>La información cambia y debe estar vigente.</li>
+      <li>Necesitas saber de qué documento sale cada respuesta.</li>
+      <li>Muchas personas hacen las mismas preguntas.</li>
+      <li>Los documentos son demasiados para adjuntarlos a mano a un chat.</li>
+    </ul></div>
+    <div class="card no yn"><h3>No conviene cuando</h3><ul>
+      <li>Los documentos no existen, están desordenados o se contradicen. Primero se ordena el archivo.</li>
+      <li>Basta con adjuntar tres o cuatro documentos a un chat.</li>
+      <li>Necesitas un cálculo exacto. Eso es trabajo para una hoja de cálculo o un sistema.</li>
+      <li>La decisión es de alto riesgo y nadie va a revisar la respuesta.</li>
+      <li>El corpus tiene datos que no puedes sacar de la organización y tu proveedor no lo garantiza.</li>
+    </ul></div>
+  </div>
+</div></section>
+
+<section class="alt" id="decisiones"><div class="wrap">
+  <p class="eyebrow">Lo que decide la dirección</p>
+  <h2>Cinco decisiones que no se delegan</h2>
+  <div class="grid g3">
+    <div class="card"><div class="n">01</div><h3>Qué problema</h3><p>Qué preguntas debe contestar y para quién.</p></div>
+    <div class="card"><div class="n">02</div><h3>Qué documentos</h3><p>Cuáles entran, cuáles no y quién es dueño de cada uno.</p></div>
+    <div class="card"><div class="n">03</div><h3>Dónde viven los datos</h3><p>Local o en la nube, y quién puede verlos.</p></div>
+    <div class="card"><div class="n">04</div><h3>Cómo se mide</h3><p>Qué es una buena respuesta y con qué preguntas de prueba.</p></div>
+    <div class="card"><div class="n">05</div><h3>Quién responde</h3><p>Quién revisa y corrige cuando el sistema se equivoca.</p></div>
+  </div>
+</div></section>
+
+<section id="medir"><div class="wrap">
+  <p class="eyebrow">Cómo se mide</p>
+  <h2>Qué es una buena respuesta, y cómo saberlo</h2>
+  <p class="lead">Antes de construir, escribe veinte preguntas reales con la respuesta correcta y el documento que la respalda. Con ellas mides cada cambio.</p>
+  <div class="grid g3" style="margin-top:28px">
+    <div class="card"><div class="n">Calidad</div><h3>Respuesta correcta</h3><p>El dueño del proceso la acepta tal como está o con cambios menores.</p></div>
+    <div class="card"><div class="n">Trazabilidad</div><h3>Fuente citada</h3><p>Cada afirmación remite a un documento y fragmento que existen y dicen eso.</p></div>
+    <div class="card"><div class="n">Honestidad</div><h3>Dice «no encontré»</h3><p>Cuando no hay respaldo, el sistema lo reconoce en lugar de inventar.</p></div>
+    <div class="card"><div class="n">Valor</div><h3>Tiempo ahorrado</h3><p>Minutos por consulta antes y después, medidos con un grupo pequeño.</p></div>
+    <div class="card"><div class="n">Adopción</div><h3>Uso real</h3><p>Cuántas personas lo usan cada semana y cuántas vuelven.</p></div>
+    <div class="card"><div class="n">Costo</div><h3>Costo por consulta</h3><p>Lo que cuesta cada respuesta, sumando el modelo, el índice y el mantenimiento.</p></div>
+  </div>
+</div></section>
+
+<section class="alt" id="riesgos"><div class="wrap">
+  <p class="eyebrow">Riesgos y gobernanza</p>
+  <h2>Cuatro riesgos que conviene nombrar desde el inicio</h2>
+  <div class="grid g4">
+    <div class="card"><h3>Fuga de información</h3><p>Documentos confidenciales o con datos personales que no debían entrar al índice.</p></div>
+    <div class="card"><h3>Permisos</h3><p>Alguien recibe en la respuesta un documento al que no tiene acceso.</p></div>
+    <div class="card"><h3>Fuente vencida</h3><p>El sistema cita una política que ya fue reemplazada.</p></div>
+    <div class="card"><h3>Respuesta sin fuente</h3><p>El modelo redacta algo que ningún fragmento respalda.</p></div>
+  </div>
+  <p class="quote">Regla de oro: toda respuesta para uso interno o con clientes cita su documento. Sin cita, no se usa.</p>
+</div></section>
+
+<section id="equipo"><div class="wrap">
+  <p class="eyebrow">Quién hace qué</p>
+  <h2>Un RAG lo sostiene un equipo, no un proveedor</h2>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card"><h3>Dueño del proceso</h3><p>Define las preguntas, acepta o rechaza las respuestas y decide si el piloto sigue.</p></div>
+    <div class="card"><h3>Dueño de los documentos</h3><p>Responde por la vigencia, los metadatos y la baja de lo vencido.</p></div>
+    <div class="card"><h3>Tecnología o datos</h3><p>Prepara, indexa, conecta el modelo y mantiene el sistema funcionando.</p></div>
+    <div class="card"><h3>Seguridad y jurídica</h3><p>Clasifican los documentos, definen permisos y revisan los datos personales.</p></div>
+    <div class="card"><h3>Usuarios piloto</h3><p>Un grupo pequeño que lo usa a diario y reporta cada respuesta mala.</p></div>
+    <div class="card"><h3>Patrocinador de la dirección</h3><p>Destraba recursos, fija el criterio de parada y recibe el reporte mensual.</p></div>
+  </div>
+</div></section>
+
+<section class="alt" id="piloto"><div class="wrap">
+  <p class="eyebrow">Cómo empezar</p>
+  <h2>Un piloto de 60 días, con criterio para parar</h2>
+  <div class="grid g3">
+    <div class="card tl"><span class="code">Días 1 a 15</span><h3>Corpus y preguntas</h3><p>Un caso de uso, un área, los documentos vigentes y veinte preguntas de prueba.</p></div>
+    <div class="card tl"><span class="code">Días 16 a 40</span><h3>Construir y medir</h3><p>Indexar, probar con las veinte preguntas y corregir las fuentes que fallan.</p></div>
+    <div class="card tl end"><span class="code">Días 41 a 60</span><h3>Uso real y decisión</h3><p>Un grupo pequeño lo usa. Al final se decide: seguir, ajustar o detener.</p></div>
+  </div>
+  <p style="margin-top:22px;color:var(--ink60)">Antes de empezar, escribe tres métricas y el umbral que obliga a detener el piloto.</p>
+</div></section>
+
+<section id="glosario"><div class="wrap">
+  <p class="eyebrow">Glosario mínimo</p>
+  <h2>Doce palabras para entender a tu equipo técnico</h2>
+  <div class="gl">
+    <div><b>Corpus</b><span>El conjunto de documentos que alimenta el sistema.</span></div>
+    <div><b>Fragmento (chunk)</b><span>Una pieza de un documento, de 300 a 500 palabras.</span></div>
+    <div><b>Metadatos</b><span>Datos sobre el fragmento: título, autor, fecha, tipo.</span></div>
+    <div><b>Embedding</b><span>La versión numérica de un texto, que permite comparar significados.</span></div>
+    <div><b>Índice vectorial</b><span>Donde se guardan los embeddings para buscarlos rápido.</span></div>
+    <div><b>Retriever</b><span>La pieza que busca y trae los fragmentos relevantes.</span></div>
+    <div><b>Generator</b><span>El modelo de lenguaje que redacta la respuesta.</span></div>
+    <div><b>Búsqueda semántica</b><span>Encuentra textos por significado y no por palabras exactas.</span></div>
+    <div><b>OCR</b><span>Lectura automática de texto en PDF escaneados o imágenes.</span></div>
+    <div><b>Alucinación</b><span>Una respuesta inventada que suena creíble.</span></div>
+    <div><b>Trazabilidad</b><span>Poder señalar de qué documento sale cada afirmación.</span></div>
+    <div><b>Prueba de concepto</b><span>Un piloto acotado para comprobar que funciona antes de invertir más.</span></div>
+  </div>
+</div></section>
+
+<section class="alt" id="faq"><div class="wrap">
+  <p class="eyebrow">Preguntas frecuentes</p>
+  <h2>Lo que siempre preguntan en el comité</h2>
+  <details><summary>¿Es lo mismo que entrenar un modelo con nuestros documentos?</summary><p>No. Entrenar cambia el modelo, es caro y queda congelado. RAG deja el modelo igual y le entrega los fragmentos vigentes cada vez que alguien pregunta. Si cambia un documento, se actualiza el índice y la respuesta cambia.</p></details>
+  <details><summary>¿Nuestros documentos terminan entrenando el modelo de otra empresa?</summary><p>Depende del proveedor y del contrato. Es una pregunta obligatoria antes de contratar: dónde se guardan los documentos, quién puede verlos y si se usan para entrenar. Que quede por escrito.</p></details>
+  <details><summary>¿Qué pasa si el sistema se equivoca?</summary><p>Se equivocará algunas veces. Por eso cada respuesta cita su fuente, un responsable revisa los reportes de error y se corrige el documento o el índice. El criterio de parada del piloto está para esto.</p></details>
+  <details><summary>¿Cuánto tarda y cuánto cuesta?</summary><p>Depende del tamaño y del estado del corpus, y más del orden de los documentos que de la tecnología. Pide a tu equipo el inventario de documentos y el porcentaje que está escaneado. Con eso se estima el trabajo. No aceptes una cifra sin esa base.</p></details>
+  <details><summary>¿Quién debe liderar el proyecto?</summary><p>El dueño del proceso de negocio, no tecnología. Tecnología construye. El negocio define qué preguntas importan y qué es una buena respuesta.</p></details>
+  <details><summary>¿Reemplaza al buscador o al gestor documental?</summary><p>Los complementa. El gestor documental guarda y controla. El RAG responde preguntas usando lo que el gestor guarda. Si los documentos están mal organizados, el RAG lo hace visible.</p></details>
+  <details><summary>¿Puedo empezar yo mismo hoy?</summary><p>Sí, a pequeña escala. Adjunta tres o cuatro documentos vigentes a una herramienta de IA, anonimizados, y hazle preguntas pidiendo cita textual de la fuente. Es una forma barata de descubrir qué preguntas valen la pena antes de construir nada.</p></details>
+</div></section>
+
+<section class="band" id="practica"><div class="wrap">
+  <p class="eyebrow">Práctica</p>
+  <h2>Treinta prompts para dirigir un proyecto de RAG.</h2>
+  <p>Seis áreas, cinco prompts cada una, con laboratorio y ejercicio. Cambia los campos entre corchetes y copia. Usa siempre información anonimizada.</p>
+  <div class="cta"><a class="btn" style="background:#f5f4ef;color:#12141c" href="sesion-rag-biblioteca.html">Abrir la biblioteca</a></div>
+</div></section>
+
+<footer><div class="wrap"><span>Next Leap S.A.S. · Curso de inmersión en Inteligencia Artificial</span><span>Sesión 2 · RAG</span></div></footer>
+</body>
+</html>
