@@ -219,13 +219,14 @@ details.more summary{cursor:pointer;font-weight:600;padding:10px 0;color:var(--g
 
 <nav class="nav" aria-label="Secciones del m&#243;dulo"><div class="wrap">
   <a class="back" href="index.html">&larr; Curso</a>
+  <a href="#diagnostico">0 &#183; Diagn&#243;stico</a>
   <a href="#logica">1 &#183; La l&#243;gica</a>
   <a href="#herramientas">2 &#183; Las herramientas</a>
   <a href="#mapa">3 &#183; Qu&#233; para qu&#233;</a>
   <a href="#clm">4 &#183; CLM por fases</a>
   <a href="#fases">5 &#183; Gesti&#243;n del trabajo</a>
   <a href="#trabajo">6 &#183; Tablero</a>
-  <a href="#madurez">7 &#183; Diagn&#243;stico</a>
+  <a href="#madurez">7 &#183; Autodiagn&#243;stico</a>
 </div></nav>
 
 <header class="hero"><div class="wrap">
@@ -233,6 +234,21 @@ details.more summary{cursor:pointer;font-weight:600;padding:10px 0;color:var(--g
   <h1>Gesti&#243;n de <em>organizaciones jur&#237;dicas</em></h1>
   <p class="lead">Un &#225;rea jur&#237;dica funciona como un sistema. Recibe solicitudes, guarda conocimiento, produce documentos, reparte trabajo y rinde cuentas. Este m&#243;dulo junta cuatro piezas que casi siempre se compran por separado: la l&#243;gica de Harvey, Amaranta, ClickUp y un CLM.</p>
 </div></header>
+
+<section class="s" id="diagnostico"><div class="wrap">
+  <span class="code">/0</span>
+  <h2>Empieza por aqu&#237;: el diagn&#243;stico de tu organizaci&#243;n</h2>
+  <p class="intro">Antes de ver las herramientas, mira d&#243;nde est&#225; parada la tuya. Un asesor con IA te hace catorce preguntas y arma tu informe: nivel de madurez, radar en cinco dimensiones, tres oportunidades con su prompt listo, dos riesgos y un plan de cuatro semanas. Necesitas el c&#243;digo de la clase.</p>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div id="dg-start" style="padding:22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <div style="flex:1 1 280px"><b style="font-size:18px">Cinco minutos, catorce preguntas</b><p class="note" style="margin:4px 0 0">No escribas nombres reales de clientes ni radicados. El informe es un borrador generado con IA.</p></div>
+      <button class="btn" id="dg-go" type="button">Empezar el diagn&#243;stico</button>
+      <a class="btn ghost" href="https://biblioteca-externado.vercel.app/diagnostico.html" target="_blank" rel="noopener" style="text-decoration:none">Abrir en pantalla completa</a>
+    </div>
+    <iframe id="dg-frame" title="Diagn&#243;stico de la organizaci&#243;n jur&#237;dica" data-src="https://biblioteca-externado.vercel.app/diagnostico.html" style="display:none;width:100%;height:860px;border:0;border-top:1px solid var(--line)" loading="lazy"></iframe>
+  </div>
+  <p class="note" style="margin:10px 0 0">Al final del m&#243;dulo hay un autodiagn&#243;stico r&#225;pido sin IA, por si no hay conexi&#243;n.</p>
+</div></section>
 
 <section class="s" id="logica"><div class="wrap">
   <span class="code">/1</span>
@@ -401,7 +417,7 @@ details.more summary{cursor:pointer;font-weight:600;padding:10px 0;color:var(--g
 
 <section class="s" id="madurez"><div class="wrap">
   <span class="code">/7</span>
-  <h2>Diagn&#243;stico: &#191;qu&#233; tan organizada est&#225; tu &#225;rea jur&#237;dica?</h2>
+  <h2>Autodiagn&#243;stico r&#225;pido, sin IA</h2>
   <p class="intro">Diez preguntas sobre cinco dimensiones. Al final ves tu radar y por d&#243;nde empezar.</p>
   <div class="exp"><p>El diagn&#243;stico no te califica. Te dice por d&#243;nde empezar. Responde con lo que pasa hoy, no con lo que deber&#237;a pasar. Una organizaci&#243;n honesta saca un radar feo y un plan &#250;til. Una orgullosa saca un radar bonito y sigue igual.</p></div>
   <div class="card mad" id="mad"></div>
@@ -423,6 +439,8 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
   secs.forEach(s=>s&&io.observe(s));
 })();
 
+$("#dg-go").addEventListener("click",()=>{const f=$("#dg-frame");f.src=f.dataset.src;f.style.display="block";$("#dg-start").style.display="none";if(location.hash!=="#diagnostico")history.replaceState(null,"","#diagnostico")});
+if(location.hash==="#diagnostico-ya")$("#dg-go").click();
 /* ---- 1. arquitectura ---- */
 const TOOLS=[
  {k:"H",n:"L\u00f3gica Harvey",c:"#2563eb",d:"Un solo punto de entrada. El trabajo se organiza por asunto, los flujos se repiten y cada respuesta cita su fuente. Una persona aprueba. Es un patr\u00f3n, no un producto que se instale."},
