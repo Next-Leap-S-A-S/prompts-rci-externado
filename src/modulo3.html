@@ -183,6 +183,26 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 .kpis div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px}
 .kpis b{display:block;font-size:14.5px;margin-bottom:2px}
 .sub{font-size:20px;margin:30px 0 6px;letter-spacing:-.01em}
+
+.exp{max-width:70ch;margin:0 0 22px}
+.exp p{margin:0 0 12px;font-size:16.5px;color:var(--ink75)}
+.exp b{color:var(--ink)}
+.exp h3{font-size:17px;margin:20px 0 6px;letter-spacing:-.005em}
+.gl{display:grid;gap:8px 18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin:0 0 22px}
+.gl div{border-left:3px solid var(--g2);padding:2px 0 2px 12px;font-size:15px}
+.gl b{display:block;font-size:15px}
+.gl span{color:var(--ink60)}
+.disc{margin:22px 0 0;border:1.5px dashed var(--g);background:var(--gs);border-radius:12px;padding:14px 18px;max-width:70ch}
+.disc h4{margin:0 0 6px;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--g)}
+.disc p{margin:0 0 6px;font-size:15.5px}
+.takeaway{margin:22px 0 0;padding:14px 18px;border-left:4px solid var(--g);background:#fff;border:1px solid var(--line);border-left:4px solid var(--g);border-radius:0 12px 12px 0;max-width:70ch;font-size:15.5px}
+.takeaway b{display:block;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--g);margin-bottom:4px}
+.fases-l{display:grid;gap:10px;margin:0 0 6px;padding:0;list-style:none;max-width:78ch}
+.fases-l li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:15.5px;color:var(--ink75)}
+.fases-l li b{color:var(--ink);display:block;margin-bottom:2px}
+.fases-l .grp{background:none;border:0;padding:6px 0 0;font:600 12px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em;color:var(--ink60)}
+details.more{max-width:78ch;margin:0 0 22px}
+details.more summary{cursor:pointer;font-weight:600;padding:10px 0;color:var(--g)}
 </style>
 </head>
 <body>
@@ -208,34 +228,82 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
   <span class="code">/1</span>
   <h2>Un punto de entrada y tres sistemas de registro</h2>
   <p class="intro">Comprar cuatro herramientas no es tener una organización. Es tener cuatro lugares donde buscar. Elige una pieza y mira qué parte del sistema cubre.</p>
+  <div class="exp">
+    <p>Imagina un área jurídica como una cocina. Los pedidos llegan por la ventanilla, los ingredientes están en la despensa, alguien cocina y alguien más vigila que no se queme nada. Si la ventanilla es un pasillo, la despensa son veinte carpetas y nadie vigila, la comida sale igual. Sale tarde, fría y a veces equivocada.</p>
+    <p>El esquema de abajo tiene tres capas. La <b>entrada</b> es el lugar único donde se pregunta y se pide. Los <b>sistemas de registro</b> son donde vive la información que importa: el conocimiento, los asuntos, los contratos y el trabajo. El <b>control</b> es lo que le permite a la dirección ver qué pasa sin preguntarle a cada abogado.</p>
+    <p>Cada herramienta que vamos a ver resuelve una de esas casillas. Ninguna resuelve todas. La pregunta de este módulo es cuál compras o construyes primero y cómo las conectas.</p>
+  </div>
   <div class="tchips" id="tchips" role="tablist"></div>
   <div class="card">
     <div class="arch" id="arch"></div>
     <div class="tdesc" id="tdesc" aria-live="polite"></div>
   </div>
   <p class="note" style="margin:10px 0 0">Borde continuo: lo cubre. Borde punteado: lo cubre en parte. Atenuado: no es su trabajo. Harvey es una plataforma comercial de IA jurídica. Aquí tomamos sus patrones de trabajo, no su producto ni su marca.</p>
+  <div class="takeaway"><b>Para llevar</b>Una herramienta resuelve un problema. Un sistema resuelve una operación. Antes de comprar, dibuja tus tres capas y marca cuáles tienes.</div>
+  <div class="disc"><h4>Para discutir en clase</h4><p>¿Dónde está hoy tu «ventanilla»? ¿Cuántos canales distintos usan en tu organización para pedirle algo a legal?</p></div>
+
 </div></section>
 
 <section class="s" id="herramientas"><div class="wrap">
   <span class="code">/2</span>
   <h2>Las cuatro piezas, una por una</h2>
   <p class="intro">Antes de integrar, hay que saber qué hace cada pieza, dónde se queda corta y cómo se monta. Elige una y recorre su ficha.</p>
+  <div class="exp"><p>Estas son las palabras que vas a oír en cualquier demo. Conviene entenderlas antes de que un vendedor las use contigo.</p></div>
+  <div class="gl">
+    <div><b>Asunto</b><span>Un caso o encargo con su propio expediente: partes, documentos y actuaciones. Una oposición de marca es un asunto.</span></div>
+    <div><b>Corpus</b><span>El conjunto de documentos sobre los que la IA responde. Si el corpus es malo, las respuestas también.</span></div>
+    <div><b>Playbook</b><span>La guía escrita de cómo negocia tu organización un tipo de contrato: qué se acepta, qué se negocia y qué no se cede.</span></div>
+    <div><b>Flujo</b><span>Un proceso guardado con instrucciones y formato de salida fijos, que se lanza con un comando. Reemplaza el «cómo era que lo pedíamos».</span></div>
+    <div><b>CLM</b><span>Contract lifecycle management. El sistema que sigue el contrato desde el pedido hasta la renovación.</span></div>
+    <div><b>Estado y campo</b><span>El estado dice dónde va una tarea. Los campos dicen qué es: cliente, tipo, plazo. Sin ellos no hay filtros ni reportes.</span></div>
+    <div><b>Triage</b><span>Clasificar un pedido al llegar: qué es, qué tan urgente y quién lo toma. Viene de las urgencias de un hospital.</span></div>
+    <div><b>Cita a la fuente</b><span>La respuesta de la IA señala en qué documento y párrafo se apoya. Es lo que permite verificarla.</span></div>
+  </div>
   <div class="tchips" id="dchips" role="tablist"></div>
   <div class="tdt" id="dtool" aria-live="polite"></div>
+  <div class="takeaway"><b>Para llevar</b>Cada pieza tiene un trabajo. La lógica Harvey responde, Amaranta organiza, ClickUp reparte y el CLM recuerda. Si una pieza intenta hacer el trabajo de otra, casi siempre lo hace mal.</div>
+  <div class="disc"><h4>Para discutir en clase</h4><p>De las cuatro piezas, ¿cuál tiene hoy tu organización aunque sea de forma artesanal? Una hoja de cálculo de contratos ya es un CLM, solo que sin alertas.</p></div>
+
 </div></section>
 
 <section class="s" id="mapa"><div class="wrap">
   <span class="code">/3</span>
   <h2>¿Qué herramienta para qué?</h2>
   <p class="intro">Tilda lo que tu área necesita resolver y mira cuánto cubre cada pieza. Ninguna lo cubre todo. Por eso se integran.</p>
+  <div class="exp">
+    <p>La matriz se lee por filas, no por columnas. Cada fila es un problema real de tu área. Cada columna muestra quién lo resuelve mejor. Verás que una misma pieza es excelente en una fila y casi inútil en otra.</p>
+    <p>Eso no es un defecto. Es la razón por la que las áreas que compran una sola herramienta «que haga todo» terminan pagando por funciones que no usan y improvisando el resto en Excel. Marca solo lo que de verdad te duele hoy.</p>
+  </div>
   <div class="mx" id="mx"></div>
   <p class="note" style="margin:10px 0 0">Calificación orientativa para la clase. Cambia según el producto concreto y según cómo se configure.</p>
+  <div class="takeaway"><b>Para llevar</b>Se elige por problema, no por marca. Empieza por la fila que más te duele y compra solo lo que la resuelve.</div>
+
 </div></section>
 
 <section class="s" id="clm"><div class="wrap">
   <span class="code">/4</span>
   <h2>CLM por fases: el ciclo de vida de un contrato</h2>
   <p class="intro">Un CLM (contract lifecycle management) acompaña el contrato desde que alguien lo pide hasta que se renueva o se cierra. Cada fase tiene un insumo, un riesgo propio y algo que medir. Toca una fase y recórrela.</p>
+  <div class="exp">
+    <h3>Por qué un contrato no es un archivo</h3>
+    <p>La mayoría de las organizaciones tratan el contrato como un documento que se firma y se guarda. Pero un contrato es una promesa con fechas. Tiene un vencimiento, un aviso previo, pagos, entregables y a veces una cláusula que renueva sola. Todo eso ocurre <b>después</b> de la firma, cuando el abogado ya está en otro asunto.</p>
+    <p>Un CLM existe para que esas fechas no dependan de la memoria de nadie. Y la IA entra en dos lugares: ayuda a producir y revisar el texto antes de la firma, y a extraer fechas y obligaciones del texto firmado para que el sistema las vigile.</p>
+    <h3>Las ocho fases en tres bloques</h3>
+  </div>
+  <ol class="fases-l">
+    <li class="grp">Antes de la firma</li>
+    <li><b>1 · Solicitud.</b> Alguien del negocio pide un contrato. Si llega sin datos, todo lo que viene después se atrasa. Por eso el formulario pide tipo, contraparte, valor y fecha deseada.</li>
+    <li><b>2 · Redacción.</b> Se arma el borrador desde una plantilla y cláusulas ya aprobadas. La IA acelera, pero solo debería usar texto que tu organización ya validó.</li>
+    <li><b>3 · Revisión.</b> Se compara el contrato, propio o de la contraparte, contra el playbook. La IA marca las desviaciones. El abogado decide cuáles importan.</li>
+    <li><b>4 · Negociación.</b> Se intercambian versiones. El riesgo es perder la cuenta de qué se cedió y por qué. El sistema guarda el historial.</li>
+    <li><b>5 · Aprobación.</b> Quien tiene autoridad por cuantía o riesgo da el visto bueno. Se registra quién y con qué condiciones.</li>
+    <li class="grp">El momento de la firma</li>
+    <li><b>6 · Firma.</b> Se firma la versión final, por quienes pueden firmar. Parece obvio. Aun así es donde más se firma por error el borrador anterior.</li>
+    <li class="grp">Después de la firma</li>
+    <li><b>7 · Ejecución.</b> Se cumplen obligaciones y se vigilan fechas. Aquí vive el valor que más se pierde: facturas sin cobrar, entregables sin exigir.</li>
+    <li><b>8 · Renovación o cierre.</b> Se decide si se renueva, se renegocia o se termina. Decidir a tiempo vale más que decidir bien, porque el aviso previo corre aunque nadie lo mire.</li>
+  </ol>
+  <p class="intro" style="margin-top:14px">Ahora recórrelas en detalle. Cada fase muestra qué hace la IA, qué decide una persona, qué queda registrado y cuándo salta una alerta.</p>
   <div class="cyc" id="cyc"></div>
   <div class="cdet" id="cdet"></div>
   <div class="cdet2" id="cdet2"></div>
@@ -256,12 +324,21 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
     </div>
     <div class="tl" id="ctl" aria-live="polite"></div>
   </div>
+  <div class="takeaway"><b>Para llevar</b>El contrato vale más después de la firma que antes. Un CLM no escribe mejores contratos. Hace que nadie olvide lo que ya se prometió.</div>
+  <div class="disc"><h4>Para discutir en clase</h4><p>¿Sabes hoy cuáles de tus contratos vencen en los próximos seis meses y cuántos tienen renovación automática? Si la respuesta es «lo averiguo», ya tienes el primer caso de uso.</p></div>
+
 </div></section>
 
 <section class="s" id="fases"><div class="wrap">
   <span class="code">/5</span>
   <h2>Gestión del trabajo: las fases de un pedido</h2>
   <p class="intro">Aquí manda la lógica de ClickUp. Un área jurídica que no gestiona su trabajo vive apagando incendios. Estas son las siete fases que recorre un pedido, desde que llega hasta que enseña algo.</p>
+  <div class="exp">
+    <h3>Gestionar el trabajo no es llevar una lista</h3>
+    <p>Un asunto es lo que haces por un cliente, con su expediente y su historia. Una tarea es la unidad de trabajo que alguien hace para avanzar un asunto. Un área jurídica tiene muchos asuntos y cientos de tareas en paralelo. Gestionar el trabajo es decidir qué se hace primero, quién lo hace y cuántas cosas a la vez puede cargar cada persona.</p>
+    <p>Esa idea viene del método Kanban. Su regla central es limitar el trabajo en curso. Si cada persona tiene ocho cosas abiertas, ninguna termina. Si tiene tres, terminan. Suena a poco y funciona mejor de lo que parece.</p>
+    <p>Esta pieza es la que más suele faltar en las áreas jurídicas. Hay conocimiento y hay contratos, pero el trabajo se reparte por quien contestó primero el correo. Sin esa capa, la IA solo hace más rápido un desorden.</p>
+  </div>
   <div class="cyc" id="wcyc"></div>
   <div class="cdet" id="wdet"></div>
   <p class="rule">Lo que no tiene dueño, fecha y estado no existe.</p>
@@ -292,12 +369,16 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
     <div><b>Carga por persona</b>Puntos abiertos frente al límite. Previene el desborde antes de que ocurra.</div>
     <div><b>Reaperturas</b>Pedidos que vuelven de «hecho». Miden la calidad de la revisión.</div>
   </div>
+  <div class="takeaway"><b>Para llevar</b>Entra por un solo lugar, clasifica antes de repartir, mira la carga antes de asignar y mide el ciclo. Eso es gestión del trabajo, con ClickUp o con una hoja bien llevada.</div>
+  <div class="disc"><h4>Para discutir en clase</h4><p>Hoy, ¿quién decide qué es urgente en tu área? ¿Con qué criterio? Si la respuesta es «el que grita más», el triage de arriba te sirve.</p></div>
+
 </div></section>
 
 <section class="s" id="trabajo"><div class="wrap">
   <span class="code">/6</span>
   <h2>El tablero: de la solicitud al archivo</h2>
   <p class="intro">Cada pedido necesita un tipo, un responsable, un plazo y un estado. Elige una solicitud y avanza la tarjeta por el tablero.</p>
+  <div class="exp"><p>Un tablero es la forma visible de todo lo anterior. Cada columna es un estado y cada tarjeta es un pedido. Lo importante no es lo bonito. Es que cualquiera, sin preguntar, vea dónde está cada cosa y quién la tiene. Elige un tipo de pedido y avanza la tarjeta. Fíjate en lo que cambia según el tipo: responsable, plazo y campos obligatorios.</p></div>
   <div class="card">
     <div class="qrow" id="rtypes"></div>
     <div class="tinfo" id="rinfo"></div>
@@ -312,6 +393,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
   <span class="code">/7</span>
   <h2>Diagnóstico: ¿qué tan organizada está tu área jurídica?</h2>
   <p class="intro">Diez preguntas sobre cinco dimensiones. Al final ves tu radar y por dónde empezar.</p>
+  <div class="exp"><p>El diagnóstico no te califica. Te dice por dónde empezar. Responde con lo que pasa hoy, no con lo que debería pasar. Una organización honesta saca un radar feo y un plan útil. Una orgullosa saca un radar bonito y sigue igual.</p></div>
   <div class="card mad" id="mad"></div>
   <div class="gdisc"><b>Manejo de información.</b> Antes de cargar un asunto en cualquier herramienta, anonimiza nombres, cédulas, NIT, radicados y datos de contacto. Los documentos con reserva legal o secreto profesional solo entran donde un contrato lo permita. Lo que produce la IA es un borrador y la decisión es de la persona responsable.</div>
 </div></section>
