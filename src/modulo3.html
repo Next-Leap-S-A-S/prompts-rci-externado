@@ -138,6 +138,51 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:20px 0 44px;colo
 footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
+
+/* herramientas a fondo */
+.tdt{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-top:12px}
+.tdt>div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;border-top:4px solid var(--tc,var(--g))}
+.tdt>div.w{grid-column:1/-1}
+.tdt h4{margin:0 0 6px;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink60)}
+.tdt p{margin:0;font-size:15px}
+.tdt ul,.tdt ol{margin:0;padding-left:20px;font-size:15px}.tdt li{margin:4px 0}
+.tdt .ex{background:var(--gs);border-top-color:var(--g2)}
+/* clm extra */
+.cdet2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));margin-top:12px}
+.cdet2>div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.cdet2 h4{margin:0 0 4px;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink60)}
+.cdet2 p{margin:0;font-size:14.5px}
+.pr{grid-column:1/-1;background:#111114!important;color:#e5e7eb;border-color:#111114!important}
+.pr h4{color:#9ca3af!important}.pr p{font:13.5px/1.55 'IBM Plex Mono',monospace!important;color:#e5e7eb}
+.ficha{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));margin-top:12px}
+.ficha div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px}
+.ficha small{display:block;color:var(--ink60);font-size:12px}
+.calc{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));align-items:start}
+.calc label{display:block;font-size:13px;color:var(--ink60);font-weight:600;margin-bottom:10px}
+.calc input{display:block;width:100%;margin-top:4px;padding:9px 10px;border:1.5px solid var(--line2);border-radius:9px;font:inherit;background:#fff}
+.tl{display:grid;gap:8px}
+.tl div{display:grid;grid-template-columns:104px 1fr;gap:10px;align-items:start;background:#fff;border:1px solid var(--line);border-left:4px solid var(--cl);border-radius:9px;padding:9px 12px;font-size:14.5px}
+.tl div.red{border-left-color:var(--bad);background:#fef2f2}
+.tl b{font:600 13px 'IBM Plex Mono',monospace}
+/* triage y carga */
+.tri{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));align-items:start}
+.tri h4,.cg h4{margin:0 0 6px;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink60)}
+.mt{display:grid;grid-template-columns:90px repeat(3,1fr);gap:4px;font-size:13px;text-align:center}
+.mt div{padding:9px 4px;border-radius:7px;background:var(--bg1);border:1px solid var(--line)}
+.mt .h{background:none;border:0;font-weight:600;color:var(--ink60);font-size:12px}
+.mt .on{outline:3px solid var(--cu);background:#faf5ff;font-weight:700}
+.p1{background:#fee2e2!important}.p2{background:#ffedd5!important}.p3{background:#fef9c3!important}.p4{background:#dcfce7!important}
+.cg .per{display:grid;grid-template-columns:120px 1fr 54px auto;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.cg .bar{height:12px;background:#0000000f;border-radius:6px;position:relative;overflow:hidden}
+.cg .bar i{display:block;height:100%;border-radius:6px;background:var(--cu);transition:width .3s}
+.cg .bar i.hot{background:var(--bad)}
+.cg .btn{padding:6px 11px;font-size:13px}
+.inbox{background:#faf5ff;border:1px solid var(--cu);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:15px}
+@media(max-width:560px){.cg .per{grid-template-columns:1fr 1fr}.cg .per .bar{grid-column:1/-1;order:3}}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));margin-top:14px}
+.kpis div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px}
+.kpis b{display:block;font-size:14.5px;margin-bottom:2px}
+.sub{font-size:20px;margin:30px 0 6px;letter-spacing:-.01em}
 </style>
 </head>
 <body>
@@ -145,10 +190,12 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 <nav class="nav" aria-label="Secciones del módulo"><div class="wrap">
   <a class="back" href="index.html">&larr; Curso</a>
   <a href="#logica">1 · La lógica</a>
-  <a href="#mapa">2 · Qué herramienta para qué</a>
-  <a href="#clm">3 · Ciclo del contrato</a>
-  <a href="#trabajo">4 · El flujo de trabajo</a>
-  <a href="#madurez">5 · Diagnóstico</a>
+  <a href="#herramientas">2 · Las herramientas</a>
+  <a href="#mapa">3 · Qué para qué</a>
+  <a href="#clm">4 · CLM por fases</a>
+  <a href="#fases">5 · Gestión del trabajo</a>
+  <a href="#trabajo">6 · Tablero</a>
+  <a href="#madurez">7 · Diagnóstico</a>
 </div></nav>
 
 <header class="hero"><div class="wrap">
@@ -169,8 +216,16 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
   <p class="note" style="margin:10px 0 0">Borde continuo: lo cubre. Borde punteado: lo cubre en parte. Atenuado: no es su trabajo. Harvey es una plataforma comercial de IA jurídica. Aquí tomamos sus patrones de trabajo, no su producto ni su marca.</p>
 </div></section>
 
-<section class="s" id="mapa"><div class="wrap">
+<section class="s" id="herramientas"><div class="wrap">
   <span class="code">/2</span>
+  <h2>Las cuatro piezas, una por una</h2>
+  <p class="intro">Antes de integrar, hay que saber qué hace cada pieza, dónde se queda corta y cómo se monta. Elige una y recorre su ficha.</p>
+  <div class="tchips" id="dchips" role="tablist"></div>
+  <div class="tdt" id="dtool" aria-live="polite"></div>
+</div></section>
+
+<section class="s" id="mapa"><div class="wrap">
+  <span class="code">/3</span>
   <h2>¿Qué herramienta para qué?</h2>
   <p class="intro">Tilda lo que tu área necesita resolver y mira cuánto cubre cada pieza. Ninguna lo cubre todo. Por eso se integran.</p>
   <div class="mx" id="mx"></div>
@@ -178,18 +233,71 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 </div></section>
 
 <section class="s" id="clm"><div class="wrap">
-  <span class="code">/3</span>
-  <h2>El ciclo de vida de un contrato</h2>
-  <p class="intro">Un CLM (contract lifecycle management) acompaña el contrato desde que alguien lo pide hasta que se renueva o se cierra. Toca cada etapa y mira qué hace la IA, qué decide una persona y qué queda registrado.</p>
+  <span class="code">/4</span>
+  <h2>CLM por fases: el ciclo de vida de un contrato</h2>
+  <p class="intro">Un CLM (contract lifecycle management) acompaña el contrato desde que alguien lo pide hasta que se renueva o se cierra. Cada fase tiene un insumo, un riesgo propio y algo que medir. Toca una fase y recórrela.</p>
   <div class="cyc" id="cyc"></div>
   <div class="cdet" id="cdet"></div>
+  <div class="cdet2" id="cdet2"></div>
   <p class="rule">La IA propone. La persona decide. El sistema recuerda.</p>
+
+  <h3 class="sub">La ficha del contrato</h3>
+  <p class="intro" style="margin-bottom:0">Un CLM vale lo que valen sus campos. Estos son los que necesitas desde el primer día. Sin ellos no hay alertas ni reportes.</p>
+  <div class="ficha" id="ficha"></div>
+
+  <h3 class="sub">Calculadora de alertas de renovación</h3>
+  <p class="intro">El error más caro de un contrato es dejar correr el aviso de no renovación. Escribe el vencimiento y el aviso previo que dice el contrato y mira cuándo debería sonar cada alerta.</p>
+  <div class="card calc">
+    <div>
+      <label>Fecha de vencimiento<input type="date" id="cv"></label>
+      <label>Aviso previo de no renovación, en días<input type="number" id="ca" value="60" min="0" max="365"></label>
+      <label>Días que necesitas para decidir y negociar<input type="number" id="cg" value="30" min="0" max="180"></label>
+      <p class="note" style="margin:0">El plazo de aviso lo fija el contrato [verificar]. Lo que cuenta aquí es la fecha de hoy.</p>
+    </div>
+    <div class="tl" id="ctl" aria-live="polite"></div>
+  </div>
+</div></section>
+
+<section class="s" id="fases"><div class="wrap">
+  <span class="code">/5</span>
+  <h2>Gestión del trabajo: las fases de un pedido</h2>
+  <p class="intro">Aquí manda la lógica de ClickUp. Un área jurídica que no gestiona su trabajo vive apagando incendios. Estas son las siete fases que recorre un pedido, desde que llega hasta que enseña algo.</p>
+  <div class="cyc" id="wcyc"></div>
+  <div class="cdet" id="wdet"></div>
+  <p class="rule">Lo que no tiene dueño, fecha y estado no existe.</p>
+
+  <h3 class="sub">Triage: urgencia por impacto</h3>
+  <p class="intro">La prioridad no se adivina. Se cruzan dos preguntas: cuánto falta para el plazo y qué pasa si sale mal.</p>
+  <div class="card tri">
+    <div>
+      <h4>Urgencia</h4>
+      <div class="qrow" id="turg"></div>
+      <h4 style="margin-top:12px">Impacto si sale mal</h4>
+      <div class="qrow" id="timp"></div>
+    </div>
+    <div>
+      <div class="mt" id="tmx"></div>
+      <div class="stnote" id="tout" style="margin-top:12px" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <h3 class="sub">Carga de trabajo: a quién se lo das</h3>
+  <p class="intro">Repartir por simpatía quema a los mismos de siempre. Mira la carga antes de asignar. El límite de cada persona es de 8 puntos y cada pedido pesa según su tamaño.</p>
+  <div class="card cg" id="cg2"></div>
+
+  <h3 class="sub">Qué medir</h3>
+  <div class="kpis">
+    <div><b>Tiempo de ciclo</b>Días entre «nuevo» y «hecho». Se mide por tipo de pedido.</div>
+    <div><b>Vencidas</b>Tareas pasadas de fecha. Una sola con plazo legal ya es incidente.</div>
+    <div><b>Carga por persona</b>Puntos abiertos frente al límite. Previene el desborde antes de que ocurra.</div>
+    <div><b>Reaperturas</b>Pedidos que vuelven de «hecho». Miden la calidad de la revisión.</div>
+  </div>
 </div></section>
 
 <section class="s" id="trabajo"><div class="wrap">
-  <span class="code">/4</span>
-  <h2>El flujo de trabajo: de la solicitud al archivo</h2>
-  <p class="intro">Aquí manda la lógica de ClickUp. Cada pedido necesita un tipo, un responsable, un plazo y un estado. Elige una solicitud y avanza la tarjeta por el tablero.</p>
+  <span class="code">/6</span>
+  <h2>El tablero: de la solicitud al archivo</h2>
+  <p class="intro">Cada pedido necesita un tipo, un responsable, un plazo y un estado. Elige una solicitud y avanza la tarjeta por el tablero.</p>
   <div class="card">
     <div class="qrow" id="rtypes"></div>
     <div class="tinfo" id="rinfo"></div>
@@ -201,7 +309,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 </div></section>
 
 <section class="s" id="madurez"><div class="wrap">
-  <span class="code">/5</span>
+  <span class="code">/7</span>
   <h2>Diagnóstico: ¿qué tan organizada está tu área jurídica?</h2>
   <p class="intro">Diez preguntas sobre cinco dimensiones. Al final ves tu radar y por dónde empezar.</p>
   <div class="card mad" id="mad"></div>
@@ -257,7 +365,55 @@ const BLK=[
   draw("A");
 })();
 
-/* ---- 2. matriz ---- */
+
+/* ---- 2. herramientas a fondo ---- */
+const TD={
+H:{que:"Más que un producto, es un patrón de trabajo que traen las plataformas de IA jurídica. Un asistente único, documentos organizados por asunto, flujos que se repiten y respuestas que citan su fuente.",
+ hace:["Responde preguntas sobre un conjunto de documentos y cita dónde lo encontró","Guarda flujos repetibles, como revisar un NDA o resumir un expediente","Aplica la misma pregunta a cien contratos y entrega una fila por contrato","Separa el trabajo por asunto, con permisos propios"],
+ corto:["No lleva la cartera ni las fechas de un contrato","No reparte tareas ni mide plazos","Su calidad es la de los documentos que le cargues","Un producto comercial exige negociar privacidad, ubicación de los datos y uso para entrenamiento"],
+ monta:["Elige las diez tareas que tu equipo repite cada semana","Convierte cada una en un flujo con instrucciones y formato de salida fijo","Carga el corpus por asunto y define quién ve qué","Decide quién aprueba antes de que algo salga"],
+ pi:"Revisión tabular de cuarenta contratos de licencia de marca. Una pregunta por columna: territorio, exclusividad, regalía, causales de terminación. Una fila por contrato. Lo que antes tomaba una semana queda en una tarde, y el abogado revisa las filas dudosas.",
+ con:"Entrega los campos extraídos al CLM y crea la tarea de seguimiento en ClickUp. Es la capa de inteligencia, no el archivo.",
+ pre:["¿Dónde se procesan y se guardan los datos?","¿Mis documentos entrenan el modelo de otros?","¿Cada afirmación trae cita verificable?","¿Quién puede ver cada asunto y quién lo dejó de ver?"]},
+A:{que:"Plataforma para organizaciones jurídicas que aplica esa lógica de punta a punta. El Inicio es el chat. Alrededor viven los asuntos, los contratos con su CLM, la base de conocimiento y las herramientas.",
+ hace:["Chat único con @asunto para traer un expediente y /flujo para lanzar un proceso","Asuntos y expedientes con partes, documentos y actuaciones","Contratos con copiloto de revisión y ficha en el CLM","Base de conocimiento con fuentes verificadas","Generador de actas con la plantilla de la organización"],
+ corto:["Cubre en parte la gestión de tareas y los reportes de dirección","No reemplaza la firma electrónica ni el sistema contable de la organización","Todo lo que produce es borrador, la decisión es de una persona"],
+ monta:["Crea la organización y sus grupos de acceso","Carga el corpus inicial: modelos, conceptos y normas más usadas","Sube plantillas y playbooks de los tres contratos más frecuentes","Arranca con un equipo piloto antes de abrirlo a todos"],
+ pi:"Un asunto de oposición de marca. Abres el chat, escribes @asunto, preguntas qué documentos faltan para contestar y pides un borrador de la contestación con las citas a la base de conocimiento. El borrador queda en el expediente.",
+ con:"Se enlaza con ClickUp por un identificador compartido: el asunto apunta a la tarea y la tarea apunta al asunto. Los contratos alimentan su propia cartera.",
+ pre:["¿Qué parte de mi operación cubre hoy y qué parte hay que completar con otra pieza?","¿Cómo se separan los datos de una organización de los de otra?","¿Quién responde por un error del borrador?","¿Qué se exporta si algún día cambio de plataforma?"]},
+C:{que:"Plataforma de gestión de trabajo. Espacios, listas, tareas, estados, campos personalizados, formularios, automatizaciones y tableros. No sabe de derecho. Sabe de procesos.",
+ hace:["Formularios que crean tareas con los campos ya llenos","Estados propios, por ejemplo nuevo, triage, trabajo, revisión y hecho","Campos personalizados: cliente, tipo de pedido, plazo legal, prioridad","Automatizaciones: al pasar a revisión asigna una segunda persona","Vistas de lista, tablero, calendario y carga de trabajo"],
+ corto:["No lee contratos ni cita normas","Sin campos obligatorios se vuelve una lista de pendientes","El contenido confidencial del asunto no debería vivir ahí, solo la referencia"],
+ monta:["Crea un espacio Legal y una lista por tipo de pedido","Define cinco estados comunes para todas","Marca como obligatorios los campos que importan","Publica un formulario de entrada y apunta a él todos los pedidos","Agrega dos automatizaciones, no veinte"],
+ pi:"Una lista de Vigilancia de marcas. Cada publicación en la gaceta crea una tarea con el campo «fecha de publicación». Una automatización calcula el vencimiento de la oposición y avisa a diez y a tres días.",
+ con:"Recibe la tarea que nace de un asunto en Amaranta y la de una renovación en el CLM. Es el tablero común, no el archivo del expediente.",
+ pre:["¿Quién mantiene la configuración cuando se va quien la montó?","¿Qué campos son obligatorios y quién los exige?","¿El contenido sensible se queda fuera de la tarea?","¿Mi equipo lo abrirá a diario o será un cementerio de tareas?"]},
+L:{que:"Software que administra el contrato de principio a fin. Plantillas, aprobaciones, versiones, firma, repositorio con campos, alertas y obligaciones. Su fuerte es la cartera, no la conversación.",
+ hace:["Plantillas y biblioteca de cláusulas aprobadas","Flujos de aprobación por cuantía y por riesgo","Control de versiones y de cambios","Firma electrónica y archivo del original firmado","Alertas de vencimiento, renovación y obligaciones"],
+ corto:["Implementarlo sobre una cartera desordenada es caro","Migrar los contratos viejos suele ser el trabajo más grande","No negocia ni opina, registra y avisa"],
+ monta:["Haz el inventario de contratos vigentes","Define los campos de la ficha, empezando por pocos","Migra primero los contratos que vencen este año","Carga plantillas y cláusulas de los tres contratos más frecuentes","Configura aprobaciones y alertas","Mide el tiempo de ciclo desde el mes uno"],
+ pi:"Cartera de licencias de marca. Cada ficha guarda licenciante, marca y clases, territorio, regalía, vigencia y aviso previo. Un tablero muestra qué licencias vencen en seis meses y cuáles tienen la regalía sin facturar.",
+ con:"Recibe de la capa de IA los campos extraídos y emite las alertas que ClickUp convierte en tareas.",
+ pre:["¿Cuántos contratos tengo y en qué estado están?","¿Quién carga los datos y quién los corrige?","¿Qué pasa con los contratos firmados antes de la herramienta?","¿Se puede exportar toda la cartera en un formato abierto?"]}
+};
+(function(){
+  $("#dchips").innerHTML=TOOLS.map(t=>`<button class="chip" data-k="${t.k}" aria-pressed="${t.k==='H'}"><i style="background:${t.c}"></i>${esc(t.n)}</button>`).join("");
+  const li=a=>a.map(x=>`<li>${esc(x)}</li>`).join("");
+  function show(k){const t=TOOLS.find(x=>x.k===k), d=TD[k];
+    $("#dtool").innerHTML=`<div class="w" style="--tc:${t.c}"><h4>Qué es</h4><p>${esc(d.que)}</p></div>
+<div style="--tc:${t.c}"><h4>Qué hace bien</h4><ul>${li(d.hace)}</ul></div>
+<div style="--tc:#dc2626"><h4>Dónde se queda corta</h4><ul>${li(d.corto)}</ul></div>
+<div style="--tc:${t.c}"><h4>Cómo se monta</h4><ol>${li(d.monta)}</ol></div>
+<div class="ex"><h4>Ejemplo en propiedad intelectual</h4><p>${esc(d.pi)}</p></div>
+<div style="--tc:${t.c}"><h4>Cómo se conecta con las otras</h4><p>${esc(d.con)}</p></div>
+<div style="--tc:#d97706"><h4>Preguntas antes de adoptarla</h4><ul>${li(d.pre)}</ul></div>`;
+    $$("#dchips .chip").forEach(c=>c.setAttribute("aria-pressed",String(c.dataset.k===k)));}
+  $("#dchips").addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b.dataset.k)});
+  show("H");
+})();
+
+/* ---- 3. matriz ---- */
 const NEEDS=[
  ["Preguntar en lenguaje natural sobre documentos y normas",{H:2,A:2,C:0,L:1}],
  ["Recibir solicitudes de las áreas con un formulario",{H:0,A:2,C:2,L:1}],
@@ -293,16 +449,104 @@ const CY=[
  ["Ejecución","Extrae obligaciones, plazos y entregables.","El responsable del contrato cumple y reporta.","Calendario de obligaciones.","Obligación próxima a vencer."],
  ["Renovación o cierre","Avisa el vencimiento y resume cómo fue la relación.","Se decide renovar, renegociar o terminar.","Decisión y motivo.","Aviso previo de no renovación que corre."]
 ];
+
+const CY2=[
+ ["Un correo, un mensaje o un formulario con lo que el área cree que necesita.","Eres abogado de contratos. Con esta solicitud, dime qué tipo de contrato es, qué datos faltan y qué preguntas debo hacerle al área. No inventes datos.","Aceptar solicitudes por chat sin los campos mínimos.","Solicitudes completas al primer intento."],
+ ["La plantilla aprobada y las cláusulas de la biblioteca.","Arma un borrador de licencia de marca con esta plantilla y estos datos. Marca entre corchetes lo que no tengas. Usa solo cláusulas de la biblioteca.","Redactar desde el último contrato que alguien recuerda.","Días hasta el primer borrador."],
+ ["El borrador de la contraparte y el playbook de la organización.","Compara este contrato con el playbook. Entrega una tabla con cláusula, desviación, nivel de riesgo y texto alternativo. Cita el párrafo de cada hallazgo.","Aceptar el resumen de la IA sin abrir el documento.","Desviaciones graves detectadas antes de firmar."],
+ ["Las versiones cruzadas y el margen de negociación autorizado.","Resume qué cambió la contraparte entre la versión 2 y la 3 y propón una respuesta por cada cambio dentro del margen que te doy.","Negociar sobre correos y perder la versión vigente.","Rondas de negociación por contrato."],
+ ["El resumen de riesgos y la matriz de aprobación por cuantía.","Prepara una nota de una página para el aprobador: qué se firma, valor, riesgos abiertos y qué se cedió en la negociación.","Aprobaciones por chat que nadie puede reconstruir.","Días en aprobación."],
+ ["La versión final y la lista de firmantes autorizados.","Verifica que el texto del PDF a firmar coincide con la última versión aprobada. Lista las diferencias si las hay.","Firmar una versión que no es la última.","Contratos firmados sin versión final archivada."],
+ ["El contrato firmado y su calendario.","Extrae del contrato las obligaciones de cada parte, con fecha o periodicidad y responsable. Entrega una tabla.","Archivar el contrato y olvidarlo hasta el reclamo.","Obligaciones cumplidas a tiempo."],
+ ["La ficha, el historial de la relación y el aviso previo.","Resume cómo fue esta relación contractual: incidentes, pagos, cambios. Recomienda renovar, renegociar o terminar y explica por qué.","Descubrir el vencimiento cuando ya renovó solo.","Contratos renovados con decisión explícita."]
+];
+const FICHA=[["Contraparte","quién firma al otro lado"],["Tipo de contrato","licencia, suministro, servicios"],["Objeto","en una frase"],["Valor y moneda","incluye regalías"],["Fecha de inicio","y de firma"],["Vencimiento","fecha exacta"],["Renovación","automática o expresa"],["Aviso previo","días para no renovar"],["Responsable interno","quien responde por el contrato"],["Estado","borrador, en firma, vigente, cerrado"],["Obligaciones clave","con fecha y responsable"],["Ley y jurisdicción","aplicable y de solución de conflictos"]];
+$("#ficha").innerHTML=FICHA.map(f=>`<div><b>${esc(f[0])}</b><small>${esc(f[1])}</small></div>`).join("");
+(function(){
+  const fmt=d=>d.toLocaleDateString("es-CO",{day:"2-digit",month:"short",year:"numeric"});
+  const cv=$("#cv"), ca=$("#ca"), cg=$("#cg");
+  const t=new Date(); t.setDate(t.getDate()+120); cv.value=t.toISOString().slice(0,10);
+  function calc(){
+    if(!cv.value){$("#ctl").innerHTML="<p>Escribe una fecha de vencimiento.</p>";return}
+    const v=new Date(cv.value+"T12:00:00"), A=+ca.value||0, G=+cg.value||0, hoy=new Date(); hoy.setHours(12,0,0,0);
+    const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+    const lim=add(v,-A), tem=add(lim,-G), ult=add(lim,-7);
+    const ev=[[tem,"Abre la decisión: renovar, renegociar o terminar. Reúnete con quien responde por el contrato."],[ult,"Última alerta. Sin decisión tomada, escala a quien aprueba."],[lim,"Fecha límite para enviar el aviso de no renovación."],[v,"Vencimiento del contrato."]];
+    $("#ctl").innerHTML=ev.map(([d,x])=>`<div class="${d<hoy?'red':''}"><b>${fmt(d)}</b><span>${esc(x)}${d<hoy?" <strong>Ya pasó.</strong>":""}</span></div>`).join("")+(lim<hoy?`<p class="note" style="margin:4px 0 0"><b>Atención.</b> El plazo de aviso ya pasó. Si el contrato renueva automáticamente, ya renovó. Revisa qué dice sobre terminación anticipada.</p>`:"");
+  }
+  [cv,ca,cg].forEach(x=>x.addEventListener("input",calc)); calc();
+})();
 (function(){
   $("#cyc").innerHTML=CY.map((c,i)=>`<button data-i="${i}" aria-pressed="${i===0}"><b>${i+1}</b>${esc(c[0])}</button>`).join("");
   function show(i){const c=CY[i];
     $("#cdet").innerHTML=`<div class="ia"><h4>Qué hace la IA</h4><p>${esc(c[1])}</p></div><div class="pe"><h4>Qué decide una persona</h4><p>${esc(c[2])}</p></div><div class="rg"><h4>Qué queda registrado</h4><p>${esc(c[3])}</p></div><div class="al"><h4>Cuándo salta una alerta</h4><p>${esc(c[4])}</p></div>`;
+    const x=CY2[i];
+    $("#cdet2").innerHTML=`<div><h4>Qué entra</h4><p>${esc(x[0])}</p></div><div><h4>Error común</h4><p>${esc(x[2])}</p></div><div><h4>Qué medir</h4><p>${esc(x[3])}</p></div><div class="pr"><h4>Prompt de ejemplo</h4><p>${esc(x[1])}</p></div>`;
     $$("#cyc button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.i===i)));}
   $("#cyc").addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(+b.dataset.i)});
   show(0);
 })();
 
-/* ---- 4. tablero ---- */
+
+/* ---- 5. fases del trabajo, triage y carga ---- */
+const WF=[
+ ["Captura","Toda solicitud entra por un solo lugar, con los campos mínimos.","Quien pide.","Formulario con campos obligatorios.","Pedido completo sin segunda vuelta.","Pedidos por WhatsApp y pasillo que nadie registra."],
+ ["Triage","Alguien clasifica el pedido, fija prioridad y asigna responsable.","Coordinador del área o abogado de turno.","Prioridad, tipo y responsable asignados.","Minutos o pocas horas hasta la asignación.","Que todo sea urgente porque nadie lo clasifica."],
+ ["Planeación","Se parte el pedido en pasos con fechas y se define qué insumos faltan.","El responsable.","Tareas con fecha y lista de documentos pendientes.","Pedidos con fecha comprometida.","Empezar a redactar antes de tener los hechos."],
+ ["Ejecución","Se produce el documento o el concepto, con apoyo del asistente.","El responsable.","Borrador en el expediente, con las fuentes citadas.","Tiempo en estado «en trabajo».","Trabajar en el correo y no en el expediente."],
+ ["Revisión","Otra persona revisa. Si hay IA, revisa también lo que produjo la IA.","Un segundo abogado o el socio.","Visto bueno registrado.","Reaperturas por error.","Revisar de afán porque ya vence."],
+ ["Entrega","El resultado llega a quien pidió, en el formato acordado, y el pedido se cierra.","El responsable.","Respuesta enviada y expediente actualizado.","Entregas a tiempo frente a la fecha comprometida.","Entregar y no cerrar, lo que deja el tablero lleno de fantasmas."],
+ ["Aprendizaje","Lo que se repitió se convierte en plantilla, flujo o entrada de la base de conocimiento.","Quien lidera el área.","Plantillas y entradas nuevas.","Pedidos que se resuelven con material existente.","Resolver lo mismo por quinta vez sin documentarlo."]
+];
+(function(){
+  $("#wcyc").innerHTML=WF.map((c,i)=>`<button data-i="${i}" aria-pressed="${i===0}"><b>${i+1}</b>${esc(c[0])}</button>`).join("");
+  function show(i){const c=WF[i];
+    $("#wdet").innerHTML=`<div class="ia"><h4>Qué pasa</h4><p>${esc(c[1])}</p></div><div class="pe"><h4>Quién</h4><p>${esc(c[2])}</p></div><div class="rg"><h4>Qué queda</h4><p>${esc(c[3])}</p></div><div class="rg"><h4>Qué medir</h4><p>${esc(c[4])}</p></div><div class="al"><h4>Dónde se rompe</h4><p>${esc(c[5])}</p></div>`;
+    $$("#wcyc button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.i===i)));}
+  $("#wcyc").addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(+b.dataset.i)});
+  show(0);
+})();
+(function(){
+  const U=["Plazo legal en 3 días o menos","Plazo en 10 días o menos","Sin plazo cercano"], I=["Alto: dinero, derechos o reputación","Medio","Bajo"];
+  const M=[[1,1,2],[1,2,3],[2,3,4]]; // [urg][imp]
+  const OUT={1:["P1 · Hoy","Primera respuesta en 4 horas. Lo atiende una persona senior y se avisa a quien dirige el área."],2:["P2 · Esta semana","Primera respuesta en 1 día hábil. Se asigna con fecha comprometida."],3:["P3 · Cola normal","Primera respuesta en 2 días hábiles. Entra al tablero con su fecha."],4:["P4 · Cuando haya espacio","Primera respuesta en 5 días hábiles. Si se repite, conviértelo en plantilla."]};
+  let u=0,im=0;
+  $("#turg").innerHTML=U.map((x,i)=>`<button class="chip" data-i="${i}" aria-pressed="${i===0}">${esc(x)}</button>`).join("");
+  $("#timp").innerHTML=I.map((x,i)=>`<button class="chip" data-i="${i}" aria-pressed="${i===0}">${esc(x)}</button>`).join("");
+  function draw(){
+    let h=`<div class="h"></div>`+I.map(x=>`<div class="h">${esc(x.split(":")[0])}</div>`).join("");
+    U.forEach((x,r)=>{h+=`<div class="h" style="text-align:right;padding-right:6px">${r===0?"3 días":r===1?"10 días":"Sin plazo"}</div>`;I.forEach((_,c)=>{const p=M[r][c];h+=`<div class="p${p} ${r===u&&c===im?'on':''}">P${p}</div>`})});
+    $("#tmx").innerHTML=h;
+    const p=M[u][im];$("#tout").innerHTML=`<b>${OUT[p][0]}.</b> ${esc(OUT[p][1])}`;
+    $$("#turg .chip").forEach((b,i)=>b.setAttribute("aria-pressed",String(i===u)));
+    $$("#timp .chip").forEach((b,i)=>b.setAttribute("aria-pressed",String(i===im)));
+  }
+  $("#turg").addEventListener("click",e=>{const b=e.target.closest("button");if(b){u=+b.dataset.i;draw()}});
+  $("#timp").addEventListener("click",e=>{const b=e.target.closest("button");if(b){im=+b.dataset.i;draw()}});
+  draw();
+})();
+(function(){
+  const LIM=8, PPL=[["Abogada Camila",5],["Abogado Andrés",7],["Abogada Laura",2],["Abogado Felipe",4]];
+  const Q=[["Contestar una oposición de marca",3],["Revisar un contrato de licencia",2],["Consulta rápida de un área",1],["Respuesta a un derecho de petición",3],["Registro de una marca nueva",2]];
+  let load, k, msg;
+  function start(){load=PPL.map(p=>p[1]);k=0;msg="";draw()}
+  function draw(){
+    const q=Q[k];
+    let h=k<Q.length?`<div class="inbox"><b>Llega:</b> ${esc(q[0])}. Peso ${q[1]}. ¿A quién se lo das?</div>`:`<div class="inbox"><b>Bandeja vacía.</b> ${load.some(x=>x>LIM)?"Alguien quedó por encima del límite. En la vida real eso se negocia antes de aceptar el plazo.":"Nadie pasó el límite. Así se ve un reparto sano."} <button class="btn ghost" data-r="1" style="margin-left:8px;padding:5px 10px;font-size:13px">Repetir</button></div>`;
+    h+=PPL.map((p,i)=>`<div class="per"><span>${esc(p[0])}</span><span class="bar"><i class="${load[i]>LIM?'hot':''}" style="width:${Math.min(100,load[i]/(LIM+3)*100)}%"></i></span><b>${load[i]}/${LIM}</b>${k<Q.length?`<button class="btn ghost" data-i="${i}">Asignar</button>`:"<span></span>"}</div>`).join("");
+    h+=`<div class="stnote" aria-live="polite" style="margin-top:10px">${msg||"Mira la barra de cada persona antes de asignar. Roja significa que pasó el límite."}</div>`;
+    $("#cg2").innerHTML=h;
+  }
+  $("#cg2").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.r)return start();
+    const i=+b.dataset.i, q=Q[k]; load[i]+=q[1];
+    const min=Math.min(...load.map((x,j)=>j===i?Infinity:x));
+    msg=load[i]>LIM?`${PPL[i][0]} queda en ${load[i]} de ${LIM}. Pasó el límite. Había quien tenía más espacio.`:`${PPL[i][0]} queda en ${load[i]} de ${LIM}. Está dentro del límite.`;
+    k++; draw();});
+  start();
+})();
+
+/* ---- 6. tablero ---- */
 const RT=[
  {n:"Contrato de licencia de marca",p:"Media",r:"Abogado de contratos",pl:"10 días hábiles para el primer borrador",l:"Contratos",c:["Contraparte","Marca y clases","Territorio y plazo","Regalía"],a:"Al pasar a revisión se asigna una segunda persona y se crea la ficha en el CLM."},
  {n:"Consulta rápida de un área",p:"Baja",r:"Abogado de turno",pl:"2 días hábiles",l:"Consultas",c:["Área solicitante","Pregunta","Documentos adjuntos"],a:"Si la misma respuesta se da tres veces, se propone convertirla en una entrada de la base de conocimiento."},
@@ -326,7 +570,7 @@ const ST=[["Nuevo","Llega por el formulario con los campos obligatorios. Sin ell
   render();
 })();
 
-/* ---- 5. madurez ---- */
+/* ---- 7. madurez ---- */
 const DIM=["Recibir","Conocimiento","Contratos","Gestión del trabajo","Gobierno de IA"];
 const MQ=[
  [0,"¿Cómo llegan hoy las solicitudes a legal?",["Por WhatsApp, correo y pasillo","Por correo, a veces con copia a varios","Por un buzón único con responsable","Por un formulario con campos obligatorios y asignación"]],
