@@ -1,6 +1,6 @@
 # Curso de inmersión en Inteligencia Artificial
 
-Página de entrada (`index.html`) con las dos sesiones: **Sesión RCI** (`sesion-rci.html`) y **Sesión RAG** (`sesion-rag.html` y `sesion-rag-biblioteca.html`). Se generan con `python3 src/build.py` (hub y RCI) y `python3 src/build_rag.py` (RAG, fuentes en `src/rag/`). Lo que sigue describe la Sesión RCI.
+Página de entrada (`index.html`) con las dos sesiones: **Sesión RCI** (`sesion-rci.html`) y **Sesión RAG** (`sesion-rag.html` y `sesion-rag-biblioteca.html`). Se generan con `python3 src/build.py` (hub y RCI) y `python3 src/build_rag.py` (RAG, fuentes en `src/rag/`). El **Módulo 4: Vibecoding** (`modulo-4.html`) es una presentación de 20 diapositivas; su fuente es `src/modulo4.html` y `src/build.py` la copia en ASCII. Lo que sigue describe la Sesión RCI.
 
 ## Sesión RCI
 

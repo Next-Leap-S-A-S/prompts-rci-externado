@@ -6,6 +6,7 @@
                          administrativo, constitucional)
 - rondas.js            : rondas del ejercicio
 - assets/*.woff2, .png : tipografias y logo, se incrustan en base64 (el hero es solo CSS)
+- modulo4.html         : presentacion del Modulo 4 (vibecoding), se copia a modulo-4.html
 
 El resultado es un unico archivo ASCII puro: fuera de <script> los caracteres
 no ASCII van como entidades HTML (&#NNNN;) y dentro de <script> como \\uXXXX.
@@ -63,12 +64,16 @@ def esc_js(s):
             out.append("\\u%04x\\u%04x" % (0xD800 + (o >> 10), 0xDC00 + (o & 0x3FF)))
     return "".join(out)
 
+def esc_css(s):
+    # Escape CSS de 6 digitos: no necesita espacio de cierre.
+    return "".join(c if ord(c) < 128 else "\\%06x" % ord(c) for c in s)
+
 def asciify(html):
-    # Separa bloques <script>...</script> del resto y escapa cada uno a su manera.
+    # Separa bloques <script> y <style> del resto y escapa cada uno a su manera.
     out, pos = [], 0
-    for m in re.finditer(r"<script\b[^>]*>.*?</script>", html, flags=re.S):
+    for m in re.finditer(r"<(script|style)\b[^>]*>.*?</\1>", html, flags=re.S):
         out.append(esc_html(html[pos:m.start()]))
-        out.append(esc_js(m.group(0)))
+        out.append((esc_js if m.group(1) == "script" else esc_css)(m.group(0)))
         pos = m.end()
     out.append(esc_html(html[pos:]))
     return "".join(out)
@@ -97,6 +102,9 @@ def main():
     m3 = (m3.replace("{{INST_BAND}}", inst_band()).replace("{{FONT_CSS}}", font_css())
             .replace("{{LOGO_PNG}}", "data:image/png;base64," + b64(SRC / "assets" / "nextleap-mark.png")))
     (ROOT / "modulo-3.html").write_text(asciify(m3), encoding="ascii")
+    # Modulo 4: presentacion de vibecoding, autocontenida (sin placeholders).
+    m4 = (SRC / "modulo4.html").read_text(encoding="utf-8")
+    (ROOT / "modulo-4.html").write_text(asciify(m4), encoding="ascii")
     n = len(re.findall(r'^\{a:"', prompts_js(), flags=re.M))
     print(f"ok: {OUT} ({OUT.stat().st_size:,} bytes, {n} prompts)")
 
